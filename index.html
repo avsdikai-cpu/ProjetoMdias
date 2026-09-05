@@ -108,7 +108,6 @@
       color: #fff;
     }
 
-    /* Ajuste de Rolagem Suave para Menus em Telas Pequenas */
     .nav-scrollable {
       overflow-x: auto;
       flex-wrap: nowrap;
@@ -120,7 +119,7 @@
 
   <div class="main-wrapper container-fluid px-2 px-md-3">
     
-    <!-- CABEÇALHO CORPORATIVO RESPONSIVO -->
+    <!-- CABEÇALHO CORPORATIVO -->
     <div class="card card-custom card-top-accent mb-3 mb-md-4">
       <div class="card-body p-3 p-md-4 text-center">
         <h2 class="navbar-brand-custom fs-3 fs-md-2 mb-1">M. DIAS BRANCO</h2>
@@ -134,14 +133,14 @@
         <button class="kpi-btn" onclick="filtrarUnidade('Jaboatão - PE (JGU)')">
           <div class="d-flex justify-content-between align-items-center mb-2">
             <span class="fw-bold small text-primary"><i class="bi bi-geo-fill"></i> Jaboatão - PE (JGU)</span>
-            <span class="badge bg-primary">15 Instaladas</span>
+            <span class="badge bg-primary" id="kpi-badge-jgu">0 Instaladas</span>
           </div>
-          <h4 class="fw-bold mb-1">15 / 81 <small class="fs-6 text-muted">máquinas</small></h4>
+          <h4 class="fw-bold mb-1"><span id="kpi-qtd-jgu">0</span> / 81 <small class="fs-6 text-muted">máquinas</small></h4>
           <div class="progress my-2" style="height: 8px;">
-            <div class="progress-bar bg-success" role="progressbar" style="width: 18.5%"></div>
+            <div class="progress-bar bg-success" id="kpi-bar-jgu" role="progressbar" style="width: 0%"></div>
           </div>
           <div class="d-flex justify-content-between align-items-center small text-muted">
-            <span class="text-truncate">Linhas 2, 3, 10, 14</span>
+            <span class="text-truncate">Ver equipamentos salvos</span>
             <span class="text-primary fw-bold ms-1 text-nowrap">Ver <i class="bi bi-arrow-right-short"></i></span>
           </div>
         </button>
@@ -151,14 +150,14 @@
         <button class="kpi-btn" onclick="filtrarUnidade('Bahia (GMA)')">
           <div class="d-flex justify-content-between align-items-center mb-2">
             <span class="fw-bold small text-warning text-dark"><i class="bi bi-geo-fill"></i> Bahia (GMA)</span>
-            <span class="badge bg-warning text-dark">BA</span>
+            <span class="badge bg-warning text-dark" id="kpi-badge-gma">0 Instaladas</span>
           </div>
-          <h4 class="fw-bold mb-1">0 / 46 <small class="fs-6 text-muted">instaladas</small></h4>
+          <h4 class="fw-bold mb-1"><span id="kpi-qtd-gma">0</span> / 46 <small class="fs-6 text-muted">máquinas</small></h4>
           <div class="progress my-2" style="height: 8px;">
-            <div class="progress-bar bg-warning" role="progressbar" style="width: 0%"></div>
+            <div class="progress-bar bg-warning" id="kpi-bar-gma" role="progressbar" style="width: 0%"></div>
           </div>
           <div class="d-flex justify-content-between align-items-center small text-muted">
-            <span>Faltam 46 máquinas</span>
+            <span class="text-truncate">Ver equipamentos salvos</span>
             <span class="text-primary fw-bold ms-1 text-nowrap">Ver <i class="bi bi-arrow-right-short"></i></span>
           </div>
         </button>
@@ -168,14 +167,14 @@
         <button class="kpi-btn" onclick="filtrarUnidade('Fortaleza')">
           <div class="d-flex justify-content-between align-items-center mb-2">
             <span class="fw-bold small text-secondary"><i class="bi bi-geo-fill"></i> Fortaleza (FOR)</span>
-            <span class="badge bg-secondary">CE</span>
+            <span class="badge bg-secondary" id="kpi-badge-for">0 Instaladas</span>
           </div>
-          <h4 class="fw-bold mb-1">0 / -- <small class="fs-6 text-muted">instaladas</small></h4>
+          <h4 class="fw-bold mb-1"><span id="kpi-qtd-for">0</span> / 20 <small class="fs-6 text-muted">máquinas</small></h4>
           <div class="progress my-2" style="height: 8px;">
-            <div class="progress-bar bg-secondary" role="progressbar" style="width: 0%"></div>
+            <div class="progress-bar bg-secondary" id="kpi-bar-for" role="progressbar" style="width: 0%"></div>
           </div>
           <div class="d-flex justify-content-between align-items-center small text-muted">
-            <span>Mapeamento Físico</span>
+            <span class="text-truncate">Ver equipamentos salvos</span>
             <span class="text-primary fw-bold ms-1 text-nowrap">Ver <i class="bi bi-arrow-right-short"></i></span>
           </div>
         </button>
@@ -462,7 +461,7 @@
               </div>
             </div>
 
-            <!-- ÁREA DE IMPORTAÇÃO DE PLANILHAS (RESPONSIVA) -->
+            <!-- ÁREA DE IMPORTAÇÃO DE PLANILHAS -->
             <div class="p-3 bg-light border rounded mb-4 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
               <div>
                 <small class="fw-bold text-dark"><i class="bi bi-file-earmark-spreadsheet-fill text-success"></i> Importação de Planilhas (Excel ou CSV)</small>
@@ -525,6 +524,10 @@
       ]
     };
 
+    document.addEventListener('DOMContentLoaded', () => {
+      atualizarKPIs();
+    });
+
     function popularLinhas(elemSelect, targetId) {
       const unidade = elemSelect.value;
       const targetSelect = document.getElementById(targetId);
@@ -540,11 +543,39 @@
       }
     }
 
+    // AÇÃO DOS BOTOES KPI
     function filtrarUnidade(unidadeNome) {
-      const tabRelatorio = new bootstrap.Tab(document.getElementById('tab-rel'));
-      tabRelatorio.show();
+      const tabBtn = document.getElementById('tab-rel');
+      const bsTab = new bootstrap.Tab(tabBtn);
+      bsTab.show();
+
       document.getElementById('filtroUnidadeTabela').value = unidadeNome;
+      document.getElementById('filtroDataInicio').value = '';
+      document.getElementById('filtroDataFim').value = '';
+      
       carregarRelatorios();
+    }
+
+    // CÁLCULO DINÂMICO DOS KPIS COM BASE NO LOCALSTORAGE
+    function atualizarKPIs() {
+      const list = JSON.parse(localStorage.getItem('bd_mdias_pro')) || [];
+      const instalacoes = list.filter(r => r.tipo === 'Instalação');
+
+      const qtdJgu = instalacoes.filter(r => r.unidade === 'Jaboatão - PE (JGU)').length;
+      const qtdGma = instalacoes.filter(r => r.unidade === 'Bahia (GMA)').length;
+      const qtdFor = instalacoes.filter(r => r.unidade === 'Fortaleza').length;
+
+      document.getElementById('kpi-qtd-jgu').innerText = qtdJgu;
+      document.getElementById('kpi-badge-jgu').innerText = `${qtdJgu} Instaladas`;
+      document.getElementById('kpi-bar-jgu').style.width = `${Math.min((qtdJgu / 81) * 100, 100)}%`;
+
+      document.getElementById('kpi-qtd-gma').innerText = qtdGma;
+      document.getElementById('kpi-badge-gma').innerText = `${qtdGma} Instaladas`;
+      document.getElementById('kpi-bar-gma').style.width = `${Math.min((qtdGma / 46) * 100, 100)}%`;
+
+      document.getElementById('kpi-qtd-for').innerText = qtdFor;
+      document.getElementById('kpi-badge-for').innerText = `${qtdFor} Instaladas`;
+      document.getElementById('kpi-bar-for').style.width = `${Math.min((qtdFor / 20) * 100, 100)}%`;
     }
 
     function salvarRegistro(e, tipoRegistro) {
@@ -574,10 +605,10 @@
       localStorage.setItem('bd_mdias_pro', JSON.stringify(bd));
 
       alert(`${tipoRegistro} gravado com sucesso!`);
+      atualizarKPIs();
       gerarRelatorioPDF(registro);
     }
 
-    // FUNÇÃO PARA IMPORTAÇÃO DE PLANILHAS EXCEL/CSV
     function importarPlanilha(e) {
       const file = e.target.files[0];
       if (!file) return;
@@ -626,6 +657,7 @@
 
         localStorage.setItem('bd_mdias_pro', JSON.stringify(bd));
         alert(`${importados} registros da planilha foram importados com sucesso!`);
+        atualizarKPIs();
         carregarRelatorios();
       };
       reader.readAsArrayBuffer(file);
@@ -647,7 +679,7 @@
       });
 
       if (filtrados.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="text-center text-muted py-3">Nenhum registro encontrado para o período/unidade selecionado.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center text-muted py-3">Nenhum registro encontrado para a unidade/período selecionado.</td></tr>`;
         return;
       }
 
@@ -655,7 +687,7 @@
         tbody.innerHTML += `
           <tr>
             <td>${r.dataHora}</td>
-            <td><span class="badge bg-primary">${r.tipo}</span></td>
+            <td><span class="badge ${r.tipo === 'Instalação' ? 'bg-success' : 'bg-primary'}">${r.tipo}</span></td>
             <td><strong>${r.unidade}</strong><br><small class="text-muted">${r.linha}</small></td>
             <td>${r.numSerie} ${r.caboTrocado && r.caboTrocado !== 'N/A' ? '<br><small class="text-danger">' + r.caboTrocado + ' (' + r.qtdCabo + ')</small>' : ''}</td>
             <td>${r.tecnico}</td>
@@ -734,6 +766,7 @@
     function limparHistorico() {
       if (confirm("Deseja apagar o histórico local?")) {
         localStorage.removeItem('bd_mdias_pro');
+        atualizarKPIs();
         carregarRelatorios();
       }
     }
