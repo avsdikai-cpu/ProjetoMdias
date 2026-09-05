@@ -9,277 +9,255 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 </head>
-<body class="bg-slate-100 text-slate-800 font-sans p-6">
+<body class="bg-slate-100 text-slate-800 font-sans p-4 md:p-6">
 
   <div class="max-w-7xl mx-auto space-y-6">
     
     <!-- Cabeçalho Principal -->
     <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4">
       <div>
-        <h1 class="text-2xl font-bold text-slate-900">M. Dias Branco — Painel de Datadores</h1>
-        <p class="text-sm text-slate-500">Gestão de instalações, relatórios e manutenção de datadores laser DLU 580</p>
+        <h1 class="text-2xl font-bold text-slate-900">M. Dias Branco — Gestão & Check-list DIKAI</h1>
+        <p class="text-sm text-slate-500">Sistema integrado de relatórios, monitoramento e manutenção (v7)</p>
       </div>
-      <!-- Navegação por Abas -->
-      <div class="flex bg-slate-100 p-1 rounded-lg border border-slate-200">
-        <button id="btn-aba-dash" onclick="mudarAba('dash')" class="px-4 py-2 text-sm font-medium rounded-md bg-white shadow-sm text-slate-800">Dashboard</button>
-        <button id="btn-aba-relatorios" onclick="mudarAba('relatorios')" class="px-4 py-2 text-sm font-medium rounded-md text-slate-600 hover:text-slate-800">Gerar Relatórios</button>
-        <button id="btn-aba-checklist" onclick="mudarAba('checklist')" class="px-4 py-2 text-sm font-medium rounded-md text-slate-600 hover:text-slate-800">Check-list Digital</button>
-      </div>
-    </div>
-
-    <!-- ABA 1: DASHBOARD DE MONITORAMENTO -->
-    <div id="aba-dash" class="space-y-6">
-      <!-- KPIs -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-          <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Mapeado</span>
-          <p id="kpi-total" class="text-3xl font-bold text-slate-800 mt-1">0</p>
-        </div>
-        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-          <span class="text-xs font-semibold text-emerald-500 uppercase tracking-wider">Instalações Concluídas</span>
-          <p id="kpi-concluido" class="text-3xl font-bold text-emerald-600 mt-1">0</p>
-        </div>
-        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-          <span class="text-xs font-semibold text-amber-500 uppercase tracking-wider">Pendentes</span>
-          <p id="kpi-pendente" class="text-3xl font-bold text-amber-600 mt-1">0</p>
-        </div>
-        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-          <span class="text-xs font-semibold text-blue-500 uppercase tracking-wider">Jaboatão (JGU)</span>
-          <p id="kpi-jaboatao" class="text-3xl font-bold text-blue-600 mt-1">0</p>
-        </div>
-      </div>
-
-      <!-- Filtros Rápidos e Tabela -->
-      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-        <div class="p-4 border-b border-slate-200 flex flex-wrap gap-3 items-center justify-between">
-          <span class="font-semibold text-slate-700">Histórico do Parque Tecnológico</span>
-          <div class="flex gap-2">
-            <select id="filtro-unidade" onchange="renderizarTabelaDash()" class="border border-slate-300 text-sm rounded-lg p-2 bg-slate-50">
-              <option value="todos">Todas as Unidades</option>
-              <option value="JGU">JGU - Jaboatão (PE)</option>
-              <option value="GMA">GMA - Salvador (BA)</option>
-              <option value="FOR">FOR - Fortaleza (CE)</option>
-            </select>
-            <select id="filtro-status" onchange="renderizarTabelaDash()" class="border border-slate-300 text-sm rounded-lg p-2 bg-slate-50">
-              <option value="todos">Todos os Status</option>
-              <option value="Concluído">Concluído</option>
-              <option value="Pendente">Pendente</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-sm text-slate-600">
-            <thead class="bg-slate-50 text-slate-700 uppercase text-xs font-semibold border-b border-slate-200">
-              <tr>
-                <th class="p-4">Data</th>
-                <th class="p-4">Unidade</th>
-                <th class="p-4">Linha</th>
-                <th class="p-4">Equipamento</th>
-                <th class="p-4">Nº de Série</th>
-                <th class="p-4">Técnico</th>
-                <th class="p-4">Status</th>
-                <th class="p-4">Observações</th>
-              </tr>
-            </thead>
-            <tbody id="tabela-dados" class="divide-y divide-slate-100">
-              <!-- Linhas inseridas via JS -->
-            </tbody>
-          </table>
-        </div>
+      <div id="box-unidade-atual" class="hidden flex items-center gap-3 bg-slate-50 border border-slate-200 px-4 py-2 rounded-lg">
+        <span class="text-xs text-slate-500 uppercase font-semibold">Unidade Ativa:</span>
+        <span id="nome-unidade-ativa" class="text-sm font-bold text-blue-700">JGU - Jaboatão</span>
+        <button onclick="voltarSelecaoUnidade()" class="text-xs bg-slate-200 hover:bg-slate-300 px-2 py-1 rounded text-slate-700 transition">Trocar</button>
       </div>
     </div>
 
-    <!-- ABA 2: GERAR RELATÓRIO (POR UNIDADE E PERÍODO) -->
-    <div id="aba-relatorios" class="hidden space-y-6">
-      <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
-        <h2 class="text-lg font-bold text-slate-800 border-b pb-2">Filtros para Geração de Relatório</h2>
+    <!-- TELA INICIAL: SELEÇÃO DE UNIDADE -->
+    <div id="tela-selecao-unidade" class="space-y-6">
+      <h2 class="text-xl font-bold text-slate-800">Selecione a Unidade para Acessar</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div onclick="selecionarUnidade('JGU', 'JGU - Jaboatão (PE)')" class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-500 cursor-pointer transition flex flex-col justify-between space-y-4">
           <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Unidade</label>
-            <select id="rel-unidade" class="w-full border border-slate-300 rounded-lg p-2 text-sm bg-slate-50">
-              <option value="todas">Todas as Unidades</option>
-              <option value="JGU">JGU - Jaboatão (PE)</option>
-              <option value="GMA">GMA - Salvador (BA)</option>
-              <option value="FOR">FOR - Fortaleza (CE)</option>
-            </select>
+            <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full uppercase">Pernambuco</span>
+            <h3 class="text-xl font-bold text-slate-800 mt-3">JGU - Jaboatão</h3>
+            <p class="text-sm text-slate-500 mt-1">Gestão de máquinas, manutenções e relatórios.</p>
           </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Data Inicial</label>
-            <input type="date" id="rel-inicio" class="w-full border border-slate-300 rounded-lg p-2 text-sm bg-slate-50">
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Data Final</label>
-            <input type="date" id="rel-fim" class="w-full border border-slate-300 rounded-lg p-2 text-sm bg-slate-50">
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Status</label>
-            <select id="rel-status" class="w-full border border-slate-300 rounded-lg p-2 text-sm bg-slate-50">
-              <option value="todos">Todos os Status</option>
-              <option value="Concluído">Concluído</option>
-              <option value="Pendente">Pendente</option>
-            </select>
+          <div class="flex justify-between items-center border-t border-slate-100 pt-3">
+            <span class="text-xs text-slate-400 font-semibold">15 Equipamentos</span>
+            <span class="text-sm font-bold text-blue-600">Acessar &rarr;</span>
           </div>
         </div>
 
-        <div class="flex flex-wrap gap-2 justify-end pt-2">
-          <button onclick="filtrarRelatorio()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition">Aplicar Filtros</button>
-          <button onclick="exportarExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition">Exportar Excel</button>
-          <button onclick="exportarPDF()" class="bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition">Gerar Relatório PDF</button>
+        <div onclick="selecionarUnidade('GMA', 'GMA - Salvador (BA)')" class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-500 cursor-pointer transition flex flex-col justify-between space-y-4">
+          <div>
+            <span class="text-xs font-bold text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full uppercase">Bahia</span>
+            <h3 class="text-xl font-bold text-slate-800 mt-3">GMA - Salvador</h3>
+            <p class="text-sm text-slate-500 mt-1">Gestão de máquinas, manutenções e relatórios.</p>
+          </div>
+          <div class="flex justify-between items-center border-t border-slate-100 pt-3">
+            <span class="text-xs text-slate-400 font-semibold">8 Equipamentos</span>
+            <span class="text-sm font-bold text-blue-600">Acessar &rarr;</span>
+          </div>
         </div>
-      </div>
 
-      <!-- Tabela de Resultado do Relatório -->
-      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-        <div class="p-4 border-b border-slate-200 flex justify-between items-center">
-          <span class="font-bold text-slate-800">Resultado da Consulta</span>
-          <span id="qtd-registros" class="text-xs text-slate-500">0 registros encontrados</span>
+        <div onclick="selecionarUnidade('FOR', 'FOR - Fortaleza (CE)')" class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-500 cursor-pointer transition flex flex-col justify-between space-y-4">
+          <div>
+            <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full uppercase">Ceará</span>
+            <h3 class="text-xl font-bold text-slate-800 mt-3">FOR - Fortaleza</h3>
+            <p class="text-sm text-slate-500 mt-1">Gestão de máquinas, manutenções e relatórios.</p>
+          </div>
+          <div class="flex justify-between items-center border-t border-slate-100 pt-3">
+            <span class="text-xs text-slate-400 font-semibold">Parque Tecnológico</span>
+            <span class="text-sm font-bold text-blue-600">Acessar &rarr;</span>
+          </div>
         </div>
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-sm text-slate-600">
-            <thead class="bg-slate-50 text-slate-700 uppercase text-xs font-semibold border-b border-slate-200">
-              <tr>
-                <th class="p-3">Data</th>
-                <th class="p-3">Unidade</th>
-                <th class="p-3">Linha</th>
-                <th class="p-3">Equipamento</th>
-                <th class="p-3">Nº Série</th>
-                <th class="p-3">Técnico</th>
-                <th class="p-3">Status</th>
-                <th class="p-3">Observações</th>
-              </tr>
-            </thead>
-            <tbody id="tabela-relatorio" class="divide-y divide-slate-100"></tbody>
-          </table>
-        </div>
+
       </div>
     </div>
 
-    <!-- ABA 3: CHECK-LIST DIGITAL (PDF DIKAI v7) -->
-    <div id="aba-checklist" class="hidden space-y-6">
-      <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col md:flex-row justify-between items-center gap-4">
-        <div>
-          <h2 class="text-lg font-bold text-slate-800">Check-list de Instalação - Datadores Laser DIKAI (v7)</h2>
-          <p class="text-xs text-slate-500">Estrutura IQ / OQ / PQ com subfases conforme protocolo oficial M. Dias Branco</p>
-        </div>
-        <div class="flex items-center gap-4 w-full md:w-auto">
-          <div class="w-full md:w-48 bg-slate-200 rounded-full h-3 overflow-hidden">
-            <div id="barra-progresso" class="bg-blue-600 h-full w-0 transition-all duration-300"></div>
+    <!-- TELA DA UNIDADE -->
+    <div id="painel-unidade" class="hidden space-y-6">
+      
+      <!-- Menu de Módulos da Unidade -->
+      <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+        <button onclick="abrirModulo('maquinas')" id="btn-mod-maquinas" class="bg-white p-3 rounded-xl border border-blue-500 shadow-sm font-bold text-blue-700 text-sm hover:bg-blue-50 transition text-center">
+          Máquinas Instaladas
+        </button>
+        <button onclick="abrirModulo('relatorios')" id="btn-mod-relatorios" class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm font-bold text-slate-700 text-sm hover:bg-blue-50 transition text-center">
+          Gerar Relatórios
+        </button>
+        <button onclick="abrirModulo('checklist')" id="btn-mod-checklist" class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm font-bold text-slate-700 text-sm hover:bg-blue-50 transition text-center">
+          Check-list Digital
+        </button>
+        <button onclick="abrirModulo('manutencao')" id="btn-mod-manutencao" class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm font-bold text-slate-700 text-sm hover:bg-blue-50 transition text-center">
+          Manutenção
+        </button>
+        <button onclick="abrirModulo('potencia')" id="btn-mod-potencia" class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm font-bold text-slate-700 text-sm hover:bg-blue-50 transition text-center">
+          Testes de Potência
+        </button>
+      </div>
+
+      <!-- MÓDULO 1: MÁQUINAS INSTALADAS -->
+      <div id="mod-maquinas" class="space-y-6">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total na Unidade</span>
+            <p id="kpi-unidade-total" class="text-3xl font-bold text-slate-800 mt-1">0</p>
           </div>
-          <span id="texto-progresso" class="text-sm font-bold text-blue-600 whitespace-nowrap">0% Concluído</span>
+          <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+            <span class="text-xs font-semibold text-emerald-500 uppercase tracking-wider">Instalações Concluídas</span>
+            <p id="kpi-unidade-concluido" class="text-3xl font-bold text-emerald-600 mt-1">0</p>
+          </div>
+          <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+            <span class="text-xs font-semibold text-amber-500 uppercase tracking-wider">Pendentes</span>
+            <p id="kpi-unidade-pendente" class="text-3xl font-bold text-amber-600 mt-1">0</p>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="p-4 border-b border-slate-200">
+            <span class="font-bold text-slate-800">Lista de Máquinas Instaladas</span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm text-slate-600">
+              <thead class="bg-slate-50 text-slate-700 uppercase text-xs font-semibold border-b border-slate-200">
+                <tr>
+                  <th class="p-4">Data</th>
+                  <th class="p-4">Linha</th>
+                  <th class="p-4">Equipamento</th>
+                  <th class="p-4">Nº de Série</th>
+                  <th class="p-4">Técnico</th>
+                  <th class="p-4">Status</th>
+                  <th class="p-4">Observações</th>
+                </tr>
+              </thead>
+              <tbody id="tabela-unidade" class="divide-y divide-slate-100"></tbody>
+            </table>
+          </div>
         </div>
       </div>
 
-      <!-- Identificação da Instalação -->
-      <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
-        <h3 class="font-bold text-sm text-slate-700 border-b pb-2">Identificação da Instalação</h3>
-        <div class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-6 gap-3 text-sm">
-          <div>
-            <label class="block text-xs text-slate-500">Unidade</label>
-            <select id="chk-unidade" class="w-full border rounded p-1.5 mt-1 text-sm bg-slate-50">
-              <option value="JGU">JGU - Jaboatão (PE)</option>
-              <option value="GMA">GMA - Salvador (BA)</option>
-              <option value="FOR">FOR - Fortaleza (CE)</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs text-slate-500">Linha</label>
-            <input type="text" placeholder="Ex: Linha 02" class="w-full border rounded p-1.5 mt-1 text-sm bg-slate-50">
-          </div>
-          <div>
-            <label class="block text-xs text-slate-500">Nº Série Datador</label>
-            <input type="text" placeholder="DLUT..." class="w-full border rounded p-1.5 mt-1 text-sm bg-slate-50">
-          </div>
-          <div>
-            <label class="block text-xs text-slate-500">Data Início</label>
-            <input type="date" class="w-full border rounded p-1.5 mt-1 text-sm bg-slate-50">
-          </div>
-          <div>
-            <label class="block text-xs text-slate-500">Conclusão / Aceite</label>
-            <input type="date" class="w-full border rounded p-1.5 mt-1 text-sm bg-slate-50">
-          </div>
-          <div>
-            <label class="block text-xs text-slate-500">Resp. Técnico</label>
-            <input type="text" placeholder="Nome" class="w-full border rounded p-1.5 mt-1 text-sm bg-slate-50">
-          </div>
-        </div>
-      </div>
+      <!-- MÓDULO 2: GERAR RELATÓRIOS (NOVO) -->
+      <div id="mod-relatorios" class="hidden space-y-6">
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+          <h3 class="text-lg font-bold text-slate-800 border-b pb-2">Central de Exportação de Relatórios</h3>
+          <p class="text-sm text-slate-500">Gere relatórios completos com base nos dados registrados para a unidade selecionada.</p>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+            <div class="p-4 border border-slate-200 rounded-lg flex justify-between items-center bg-slate-50">
+              <div>
+                <h4 class="font-bold text-slate-800">Relatório de Equipamentos (Excel)</h4>
+                <p class="text-xs text-slate-500">Planilha estruturada com histórico de instalações.</p>
+              </div>
+              <button onclick="exportarExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition">Baixar Excel</button>
+            </div>
 
-      <!-- Fases do Protocolo DIKAI -->
-      <div class="space-y-4">
-        <!-- Fase 0 -->
-        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-          <div class="bg-slate-50 p-4 border-b border-slate-200 font-bold text-slate-700 text-sm">
-            Fase 0 — Pré-Instalação: Conferência de Materiais e Componentes
-          </div>
-          <div class="p-4 divide-y divide-slate-100 text-sm">
-            <div class="py-2 flex items-center justify-between">
-              <label class="flex items-center gap-3"><input type="checkbox" onchange="calcProgresso()" class="chk-box w-4 h-4 text-blue-600"> <span>Chapa de Fixação dos Rolos (2 un.)</span></label>
-              <span class="text-xs bg-slate-100 px-2 py-1 rounded text-slate-600">Conferência</span>
-            </div>
-            <div class="py-2 flex items-center justify-between">
-              <label class="flex items-center gap-3"><input type="checkbox" onchange="calcProgresso()" class="chk-box w-4 h-4 text-blue-600"> <span>Pad de Estabilização do Filme (1 un.)</span></label>
-              <span class="text-xs bg-slate-100 px-2 py-1 rounded text-slate-600">Conferência</span>
-            </div>
-            <div class="py-2 flex items-center justify-between">
-              <label class="flex items-center gap-3"><input type="checkbox" onchange="calcProgresso()" class="chk-box w-4 h-4 text-blue-600"> <span>Conjunto de Fixação do Cabeçote (1 un.)</span></label>
-              <span class="text-xs bg-slate-100 px-2 py-1 rounded text-slate-600">Conferência</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Fase 1: IQ -->
-        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-          <div class="bg-slate-50 p-4 border-b border-slate-200 font-bold text-slate-700 text-sm">
-            Fase 1 — IQ: Qualificação de Instalação (Mecânica e Elétrica)
-          </div>
-          <div class="p-4 divide-y divide-slate-100 text-sm">
-            <div class="py-2 flex items-center justify-between">
-              <label class="flex items-center gap-3"><input type="checkbox" onchange="calcProgresso()" class="chk-box w-4 h-4 text-blue-600"> <span>[MEC-01] Utilizar furações existentes nos suportes sempre que possível</span></label>
-              <span class="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded">Verificação Padrão</span>
-            </div>
-            <div class="py-2 flex items-center justify-between">
-              <label class="flex items-center gap-3"><input type="checkbox" onchange="calcProgresso()" class="chk-box w-4 h-4 text-blue-600"> <span>[MEC-02] Instalar datador preferencialmente com o laser voltado para baixo</span></label>
-              <span class="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded">Verificação Padrão</span>
-            </div>
-            <div class="py-2 flex items-center justify-between">
-              <label class="flex items-center gap-3"><input type="checkbox" onchange="calcProgresso()" class="chk-box w-4 h-4 text-blue-600"> <span>[ELE-05] Habilitar porta Ethernet para comunicação com PLC e monitoramento</span></label>
-              <span class="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded">Verificação Padrão</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Fase 2 & 3: OQ/PQ -->
-        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-          <div class="bg-slate-50 p-4 border-b border-slate-200 font-bold text-slate-700 text-sm">
-            Fase 2 & 3 — OQ / PQ: Qualificação Operacional e Desempenho
-          </div>
-          <div class="p-4 divide-y divide-slate-100 text-sm">
-            <div class="py-2 flex items-center justify-between">
-              <label class="flex items-center gap-3"><input type="checkbox" onchange="calcProgresso()" class="chk-box w-4 h-4 text-blue-600"> <span>[TST-02] Teste com máquina parada por no mínimo 3 minutos simulando operação</span></label>
-              <span class="text-xs bg-purple-50 text-purple-700 px-2 py-1 rounded">OQ - Operacional</span>
-            </div>
-            <div class="py-2 flex items-center justify-between">
-              <label class="flex items-center gap-3"><input type="checkbox" onchange="calcProgresso()" class="chk-box w-4 h-4 text-blue-600"> <span>[EST2-01] Estabilização em produção contínua por no mínimo 72 horas sem falhas</span></label>
-              <span class="text-xs bg-emerald-50 text-emerald-700 px-2 py-1 rounded">PQ - Desempenho</span>
-            </div>
-            <div class="py-2 flex items-center justify-between">
-              <label class="flex items-center gap-3"><input type="checkbox" onchange="calcProgresso()" class="chk-box w-4 h-4 text-blue-600"> <span>[QSE-05] Sinalização e etiquetas de advertência a laser em conformidade com NR-12</span></label>
-              <span class="text-xs bg-amber-50 text-amber-700 px-2 py-1 rounded">Segurança NR-12</span>
+            <div class="p-4 border border-slate-200 rounded-lg flex justify-between items-center bg-slate-50">
+              <div>
+                <h4 class="font-bold text-slate-800">Relatório Operacional (PDF)</h4>
+                <p class="text-xs text-slate-500">Documento formatado pronto para impressão/envio.</p>
+              </div>
+              <button onclick="exportarPDF()" class="bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition">Baixar PDF</button>
             </div>
           </div>
         </div>
       </div>
+
+      <!-- MÓDULO 3: CHECK-LIST DIGITAL -->
+      <div id="mod-checklist" class="hidden space-y-6">
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col md:flex-row justify-between items-center gap-4">
+          <div>
+            <h3 class="text-lg font-bold text-slate-800">Check-list Digital de Instalação (v7)</h3>
+            <p class="text-xs text-slate-500">Validação IQ / OQ / PQ</p>
+          </div>
+          <div class="flex items-center gap-4 w-full md:w-auto">
+            <div class="w-full md:w-48 bg-slate-200 rounded-full h-3 overflow-hidden">
+              <div id="barra-progresso" class="bg-blue-600 h-full w-0 transition-all duration-300"></div>
+            </div>
+            <span id="texto-progresso" class="text-sm font-bold text-blue-600 whitespace-nowrap">0% Concluído</span>
+          </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
+          <div class="space-y-3">
+            <div class="p-3 border rounded-lg flex items-center justify-between">
+              <label class="flex items-center gap-3"><input type="checkbox" onchange="calcProgresso()" class="chk-box w-4 h-4 text-blue-600"> <span>Fase 0 — Conferência de componentes mecânicos e suportes</span></label>
+            </div>
+            <div class="p-3 border rounded-lg flex items-center justify-between">
+              <label class="flex items-center gap-3"><input type="checkbox" onchange="calcProgresso()" class="chk-box w-4 h-4 text-blue-600"> <span>Fase 1 (IQ) — Fixação física do datador e alinhamento do feixe laser</span></label>
+            </div>
+            <div class="p-3 border rounded-lg flex items-center justify-between">
+              <label class="flex items-center gap-3"><input type="checkbox" onchange="calcProgresso()" class="chk-box w-4 h-4 text-blue-600"> <span>Fase 1 (IQ) — Conexão elétrica, aterramento e integração Ethernet/PLC</span></label>
+            </div>
+            <div class="p-3 border rounded-lg flex items-center justify-between">
+              <label class="flex items-center gap-3"><input type="checkbox" onchange="calcProgresso()" class="chk-box w-4 h-4 text-blue-600"> <span>Fase 2 (OQ) — Testes funcionais com linha parada e em movimento</span></label>
+            </div>
+            <div class="p-3 border rounded-lg flex items-center justify-between">
+              <label class="flex items-center gap-3"><input type="checkbox" onchange="calcProgresso()" class="chk-box w-4 h-4 text-blue-600"> <span>Fase 3 (PQ) — Teste de estresse contínuo (72h) e inspeção de legibilidade</span></label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MÓDULO 4: MANUTENÇÃO -->
+      <div id="mod-manutencao" class="hidden space-y-6">
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+          <h3 class="text-lg font-bold text-slate-800 border-b pb-2">Registro de Manutenção</h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Tipo de Manutenção</label>
+              <select class="w-full border border-slate-300 rounded-lg p-2 text-sm bg-slate-50">
+                <option>PREVENTIVA</option>
+                <option>CORRETIVA</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Equipamento / Linha</label>
+              <input type="text" placeholder="Ex: Flow Pack 01 - Linha 02" class="w-full border border-slate-300 rounded-lg p-2 text-sm bg-slate-50">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Técnico Responsável</label>
+              <input type="text" placeholder="Nome do Técnico" class="w-full border border-slate-300 rounded-lg p-2 text-sm bg-slate-50">
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Descrição do Serviço / Peças Trocadas</label>
+            <textarea rows="3" placeholder="Descreva as ações realizadas..." class="w-full border border-slate-300 rounded-lg p-2 text-sm bg-slate-50"></textarea>
+          </div>
+          <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition">Salvar Manutenção</button>
+        </div>
+      </div>
+
+      <!-- MÓDULO 5: TESTES DE POTÊNCIA -->
+      <div id="mod-potencia" class="hidden space-y-6">
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+          <h3 class="text-lg font-bold text-slate-800 border-b pb-2">Aferição de Potência do Laser (W)</h3>
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Nº de Série Datador</label>
+              <input type="text" placeholder="DLUT..." class="w-full border border-slate-300 rounded-lg p-2 text-sm bg-slate-50">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Potência Nominal (W)</label>
+              <input type="number" value="30" class="w-full border border-slate-300 rounded-lg p-2 text-sm bg-slate-50">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Potência Medida (W)</label>
+              <input type="number" step="0.1" placeholder="Ex: 29.5" class="w-full border border-slate-300 rounded-lg p-2 text-sm bg-slate-50">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Status do Tubo</label>
+              <select class="w-full border border-slate-300 rounded-lg p-2 text-sm bg-slate-50">
+                <option>Aprovado (Eficiência > 90%)</option>
+                <option>Atenção (Eficiência 80%-90%)</option>
+                <option>Crítico (Requer Troca)</option>
+              </select>
+            </div>
+          </div>
+          <button class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition">Registrar Medição</button>
+        </div>
+      </div>
+
     </div>
 
   </div>
 
   <script>
-    // Base de Dados Completa Sincronizada (Jaboatão -> JGU | Bahia -> GMA)
     const dadosEquipamentos = [
       { id: 1, data: "2026-07-10", unidade: "JGU", linha: "Linha 02", equipamento: "Flow Pack 01", serie: "DLUT58260320", tecnico: "Charles / Andre", status: "Concluído", obs: "Instalação finalizada" },
       { id: 2, data: "2026-07-12", unidade: "JGU", linha: "Linha 02", equipamento: "Flow Pack 02", serie: "DLUT58260294", tecnico: "Charles / Andre", status: "Concluído", obs: "Instalação finalizada" },
@@ -306,93 +284,58 @@
       { id: 23, data: "2026-09-01", unidade: "JGU", linha: "Linha 03", equipamento: "Cracker Flowpack 04", serie: "DLUT58260258", tecnico: "Andre Santana", status: "Concluído", obs: "Instalação finalizada" }
     ];
 
-    let registrosFiltrados = [...dadosEquipamentos];
+    let unidadeSelecionada = "";
 
-    function mudarAba(aba) {
-      ['dash', 'relatorios', 'checklist'].forEach(a => {
-        document.getElementById(`aba-${a}`).classList.add('hidden');
-        document.getElementById(`btn-aba-${a}`).className = "px-4 py-2 text-sm font-medium rounded-md text-slate-600 hover:text-slate-800";
-      });
+    function selecionarUnidade(codigo, nomeExtenso) {
+      unidadeSelecionada = codigo;
+      document.getElementById("tela-selecao-unidade").classList.add("hidden");
+      document.getElementById("painel-unidade").classList.remove("hidden");
+      document.getElementById("box-unidade-atual").classList.remove("hidden");
+      document.getElementById("nome-unidade-ativa").innerText = nomeExtenso;
 
-      document.getElementById(`aba-${aba}`).classList.remove('hidden');
-      document.getElementById(`btn-aba-${aba}`).className = "px-4 py-2 text-sm font-medium rounded-md bg-white shadow-sm text-slate-800";
+      abrirModulo('maquinas');
+      renderizarTabelaUnidade();
     }
 
-    function renderizarTabelaDash() {
-      const uFiltro = document.getElementById('filtro-unidade').value;
-      const sFiltro = document.getElementById('filtro-status').value;
-      const tbody = document.getElementById('tabela-dados');
-      tbody.innerHTML = '';
+    function voltarSelecaoUnidade() {
+      document.getElementById("tela-selecao-unidade").classList.remove("hidden");
+      document.getElementById("painel-unidade").classList.add("hidden");
+      document.getElementById("box-unidade-atual").classList.add("hidden");
+    }
 
-      const filtrados = dadosEquipamentos.filter(item => {
-        const uMatch = uFiltro === 'todos' || item.unidade === uFiltro;
-        const sMatch = sFiltro === 'todos' || item.status === sFiltro;
-        return uMatch && sMatch;
+    function abrirModulo(modulo) {
+      ['maquinas', 'relatorios', 'checklist', 'manutencao', 'potencia'].forEach(m => {
+        document.getElementById(`mod-${m}`).classList.add("hidden");
+        const btn = document.getElementById(`btn-mod-${m}`);
+        btn.className = "bg-white p-3 rounded-xl border border-slate-200 shadow-sm font-bold text-slate-700 text-sm hover:bg-blue-50 transition text-center";
       });
+
+      document.getElementById(`mod-${modulo}`).classList.remove("hidden");
+      const btnAtivo = document.getElementById(`btn-mod-${modulo}`);
+      btnAtivo.className = "bg-white p-3 rounded-xl border border-blue-500 shadow-sm font-bold text-blue-700 text-sm hover:bg-blue-50 transition text-center";
+    }
+
+    function renderizarTabelaUnidade() {
+      const tbody = document.getElementById("tabela-unidade");
+      tbody.innerHTML = "";
+
+      const filtrados = dadosEquipamentos.filter(item => item.unidade === unidadeSelecionada);
+
+      document.getElementById("kpi-unidade-total").innerText = filtrados.length;
+      document.getElementById("kpi-unidade-concluido").innerText = filtrados.filter(i => i.status === "Concluído").length;
+      document.getElementById("kpi-unidade-pendente").innerText = filtrados.filter(i => i.status === "Pendente").length;
 
       filtrados.forEach(item => {
         const badgeClass = item.status === 'Concluído' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800';
         tbody.innerHTML += `
           <tr class="hover:bg-slate-50 transition">
             <td class="p-4 font-mono text-xs">${item.data}</td>
-            <td class="p-4 font-medium text-slate-800">${item.unidade}</td>
             <td class="p-4">${item.linha}</td>
-            <td class="p-4">${item.equipamento}</td>
+            <td class="p-4 font-medium text-slate-800">${item.equipamento}</td>
             <td class="p-4 font-mono text-xs">${item.serie}</td>
             <td class="p-4">${item.tecnico}</td>
             <td class="p-4"><span class="px-2 py-1 text-xs font-semibold rounded-full ${badgeClass}">${item.status}</span></td>
             <td class="p-4 text-slate-500">${item.obs}</td>
-          </tr>
-        `;
-      });
-
-      atualizarKPIs();
-    }
-
-    function atualizarKPIs() {
-      document.getElementById('kpi-total').innerText = dadosEquipamentos.length;
-      document.getElementById('kpi-concluido').innerText = dadosEquipamentos.filter(i => i.status === 'Concluído').length;
-      document.getElementById('kpi-pendente').innerText = dadosEquipamentos.filter(i => i.status === 'Pendente').length;
-      document.getElementById('kpi-jaboatao').innerText = dadosEquipamentos.filter(i => i.unidade === 'JGU').length;
-    }
-
-    function filtrarRelatorio() {
-      const unidade = document.getElementById('rel-unidade').value;
-      const inicio = document.getElementById('rel-inicio').value;
-      const fim = document.getElementById('rel-fim').value;
-      const status = document.getElementById('rel-status').value;
-
-      registrosFiltrados = dadosEquipamentos.filter(item => {
-        const matchUnidade = unidade === 'todas' || item.unidade === unidade;
-        const matchStatus = status === 'todos' || item.status === status;
-        let matchData = true;
-        if (inicio) matchData = matchData && item.data >= inicio;
-        if (fim) matchData = matchData && item.data <= fim;
-
-        return matchUnidade && matchStatus && matchData;
-      });
-
-      renderizarTabelaRelatorio();
-    }
-
-    function renderizarTabelaRelatorio() {
-      const tbody = document.getElementById('tabela-relatorio');
-      tbody.innerHTML = '';
-
-      document.getElementById('qtd-registros').innerText = `${registrosFiltrados.length} registros encontrados`;
-
-      registrosFiltrados.forEach(item => {
-        const badgeClass = item.status === 'Concluído' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800';
-        tbody.innerHTML += `
-          <tr class="hover:bg-slate-50 transition">
-            <td class="p-3 font-mono text-xs">${item.data}</td>
-            <td class="p-3 font-semibold text-slate-800">${item.unidade}</td>
-            <td class="p-3">${item.linha}</td>
-            <td class="p-3">${item.equipamento}</td>
-            <td class="p-3 font-mono text-xs">${item.serie}</td>
-            <td class="p-3">${item.tecnico}</td>
-            <td class="p-3"><span class="px-2 py-1 text-xs font-semibold rounded-full ${badgeClass}">${item.status}</span></td>
-            <td class="p-3 text-slate-500">${item.obs}</td>
           </tr>
         `;
       });
@@ -408,31 +351,28 @@
     }
 
     function exportarExcel() {
-      const ws = XLSX.utils.json_to_sheet(registrosFiltrados);
+      const filtrados = dadosEquipamentos.filter(item => item.unidade === unidadeSelecionada);
+      const ws = XLSX.utils.json_to_sheet(filtrados);
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, "Equipamentos");
-      XLSX.writeFile(wb, "Relatorio_MDiasBranco.xlsx");
+      XLSX.writeFile(wb, `Relatorio_${unidadeSelecionada}.xlsx`);
     }
 
     function exportarPDF() {
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
-      doc.text("Relatório de Instalações - M. Dias Branco", 14, 15);
+      const filtrados = dadosEquipamentos.filter(item => item.unidade === unidadeSelecionada);
+
+      doc.text(`Relatório de Instalações - Unidade ${unidadeSelecionada}`, 14, 15);
       
-      const tableData = registrosFiltrados.map(i => [i.data, i.unidade, i.linha, i.equipamento, i.serie, i.tecnico, i.status]);
+      const tableData = filtrados.map(i => [i.data, i.linha, i.equipamento, i.serie, i.tecnico, i.status]);
       doc.autoTable({
-        head: [['Data', 'Unidade', 'Linha', 'Equipamento', 'Série', 'Técnico', 'Status']],
+        head: [['Data', 'Linha', 'Equipamento', 'Série', 'Técnico', 'Status']],
         body: tableData,
         startY: 20
       });
-      doc.save("Relatorio_MDiasBranco.pdf");
+      doc.save(`Relatorio_${unidadeSelecionada}.pdf`);
     }
-
-    window.onload = function() {
-      renderizarTabelaDash();
-      filtrarRelatorio();
-    };
   </script>
 </body>
 </html>
-
