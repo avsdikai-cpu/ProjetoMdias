@@ -3,38 +3,364 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Check-list DIKAI - M. Dias Branco</title>
+  <title>PROJETOS M. DIAS - Sistema Unificado</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
-  
   <style>
-    :root { --primary-color: #004b93; --primary-hover: #00366b; --bg-color: #f4f6f9; }
-    body { background-color: var(--bg-color); font-family: system-ui, -apple-system, sans-serif; }
-    .main-card { max-width: 800px; margin: 0 auto; border: none; border-top: 5px solid var(--primary-color); }
-    .header-title { color: var(--primary-color); letter-spacing: 1px; }
-    .section-header { background-color: #eef4fa; color: var(--primary-color); font-size: 0.95rem; font-weight: 700; padding: 10px 15px; border-radius: 6px; margin-top: 25px; margin-bottom: 15px; }
-    .check-item { padding: 8px 12px; border-bottom: 1px solid #f0f0f0; border-radius: 6px; }
-    .check-item:hover { background-color: #f8f9fa; }
-    .btn-primary-custom { background-color: var(--primary-color); border-color: var(--primary-color); color: #fff; }
-    .btn-primary-custom:hover { background-color: var(--primary-hover); color: #fff; }
-    .nav-pills .nav-link.active { background-color: var(--primary-color); }
-    .nav-pills .nav-link { color: var(--primary-color); }
+    :root { --primary: #004b93; --bg: #f4f6f9; }
+    body { background-color: var(--bg); font-family: system-ui, -apple-system, sans-serif; }
+    .main-card { max-width: 950px; margin: 0 auto; border: none; border-top: 5px solid var(--primary); }
+    .nav-pills .nav-link.active { background-color: var(--primary); }
+    .nav-pills .nav-link { color: var(--primary); }
+    .section-header { background-color: #eef4fa; color: var(--primary); font-size: 0.95rem; font-weight: 700; padding: 10px; border-radius: 6px; margin: 20px 0 10px 0; }
+    .kpi-card { border: 1px solid #e3e8ee; border-radius: 8px; background: #fff; padding: 12px; }
   </style>
 </head>
-<body class="py-4 px-2">
+<body class="py-3 px-2">
 
-  <div class="container">
+  <div class="container-fluid">
     <div class="card shadow-sm main-card">
-      <div class="card-body p-4">
+      <div class="card-body p-3 p-md-4">
         
-        <!-- Cabeçalho Principal -->
+        <!-- Cabeçalho -->
         <div class="text-center pb-3 mb-3 border-bottom">
-          <h2 class="fw-bold header-title m-0">PROJETOS M. DIAS</h2>
-          <span class="badge bg-secondary mt-2">Validação Técnica e Controle de Instalações</span>
+          <h2 class="fw-bold text-primary m-0" style="color: #004b93 !important;">PROJETOS M. DIAS</h2>
+          <small class="text-muted fw-semibold">Gestão de Instalação de Datadores Laser (JGU • GMA • Fortaleza)</small>
         </div>
+
+        <!-- DASHBOARD DE PROGRESSO E METAS -->
+        <div class="row g-2 mb-4">
+          <div class="col-md-4">
+            <div class="kpi-card shadow-sm">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="fw-bold small text-primary">Jaboatão - PE (JGU)</span>
+                <span class="badge bg-primary">PE</span>
+              </div>
+              <h5 class="fw-bold mb-1" id="kpi-pe">4 / 81 <small class="fs-6 text-muted">instaladas</small></h5>
+              <div class="progress mb-2" style="height: 8px;">
+                <div class="progress-bar bg-success" role="progressbar" style="width: 5%"></div>
+              </div>
+              <small class="text-danger fw-semibold"><i class="bi bi-clock-history"></i> Faltam: 77 máquinas</small>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="kpi-card shadow-sm">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="fw-bold small text-warning text-dark">Bahia (GMA)</span>
+                <span class="badge bg-warning text-dark">BA</span>
+              </div>
+              <h5 class="fw-bold mb-1" id="kpi-gma">0 / 46 <small class="fs-6 text-muted">instaladas</small></h5>
+              <div class="progress mb-2" style="height: 8px;">
+                <div class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
+              </div>
+              <small class="text-danger fw-semibold"><i class="bi bi-clock-history"></i> Faltam: 46 máquinas</small>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="kpi-card shadow-sm">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="fw-bold small text-secondary">Fortaleza</span>
+                <span class="badge bg-secondary">CE</span>
+              </div>
+              <h5 class="fw-bold mb-1">-- / -- <small class="fs-6 text-muted">instaladas</small></h5>
+              <div class="progress mb-2" style="height: 8px;">
+                <div class="progress-bar bg-secondary" role="progressbar" style="width: 0%"></div>
+              </div>
+              <small class="text-muted fw-semibold"><i class="bi bi-dash-circle"></i> Aguardando dados</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Abas -->
+        <ul class="nav nav-pills nav-justified mb-3" id="pills-tab" role="tablist">
+          <li class="nav-item">
+            <button class="nav-link active fw-bold small" id="tab-form" data-bs-toggle="pill" data-bs-target="#pills-form"><i class="bi bi-file-earmark-plus"></i> Novo Check-list</button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link fw-bold small" id="tab-base" data-bs-toggle="pill" data-bs-target="#pills-base" onclick="carregarBaseLinhas()"><i class="bi bi-database"></i> Base Unificada</button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link fw-bold small" id="tab-consulta" data-bs-toggle="pill" data-bs-target="#pills-consulta" onclick="carregarHistoricoTabela()"><i class="bi bi-search"></i> Relatórios</button>
+          </li>
+        </ul>
+
+        <div class="tab-content">
+          
+          <!-- ABA 1: FORMULÁRIO -->
+          <div class="tab-pane fade show active" id="pills-form">
+            <form id="checklistForm" onsubmit="salvarEGerarPDF(event)">
+              
+              <div class="section-header"><i class="bi bi-geo-alt-fill"></i> 1. Identificação e Unidade</div>
+              <div class="row g-2 mb-2">
+                <div class="col-md-6">
+                  <label class="form-label small fw-bold">Unidade Industrial</label>
+                  <select id="unidade" class="form-select" onchange="atualizarLinhasUnidade()" required>
+                    <option value="" disabled selected>Selecione a unidade...</option>
+                    <option value="Jaboatão - PE (JGU)">Jaboatão - PE (JGU)</option>
+                    <option value="Bahia (GMA)">Bahia (GMA)</option>
+                    <option value="Fortaleza">Fortaleza</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label small fw-bold">Linha de Produção</label>
+                  <select id="linha" class="form-select" required>
+                    <option value="" disabled selected>Selecione a unidade primeiro...</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="row g-2 mb-2">
+                <div class="col-6">
+                  <label class="form-label small fw-bold">Data Inicial</label>
+                  <input type="date" id="dataInicio" class="form-control" required>
+                </div>
+                <div class="col-6">
+                  <label class="form-label small fw-bold">Data Final</label>
+                  <input type="date" id="dataFim" class="form-control" required>
+                </div>
+              </div>
+
+              <div class="row g-2 mb-2">
+                <div class="col-md-4">
+                  <label class="form-label small fw-bold">Nº de Série</label>
+                  <input type="text" id="numSerie" class="form-control" placeholder="Ex: DLUT58260320" required>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label small fw-bold">Equipamento</label>
+                  <input type="text" id="maquina" class="form-control" placeholder="Ex: Flowpack 01" required>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label small fw-bold">Técnico Responsável</label>
+                  <input type="text" id="tecnico" class="form-control" placeholder="Nome do técnico" required>
+                </div>
+              </div>
+
+              <div class="section-header"><i class="bi bi-check2-square"></i> 2. Itens de Inspeção Técnica</div>
+              <div class="form-check p-2 border-bottom"><input type="checkbox" class="form-check-input chk" id="f0_1"><label class="form-check-label small" for="f0_1">Chapa de Fixação e Suporte do Laser instalado corretamente</label></div>
+              <div class="form-check p-2 border-bottom"><input type="checkbox" class="form-check-input chk" id="iq_1"><label class="form-check-label small" for="iq_1">Elétrica e Redes: Disjuntor 10A e cabo Ethernet conectados</label></div>
+              <div class="form-check p-2 border-bottom"><input type="checkbox" class="form-check-input chk" id="oq_1"><label class="form-check-label small" for="oq_1">Teste de Impressão: Código gravado corretamente no filme</label></div>
+              <div class="form-check p-2 border-bottom"><input type="checkbox" class="form-check-input chk" id="pq_1"><label class="form-check-label small" for="pq_1">Validação: Teste contínuo de produção e normas NR-12 ok</label></div>
+
+              <button type="submit" class="btn btn-primary w-100 fw-bold mt-3 py-2" style="background-color:#004b93"><i class="bi bi-disk-fill"></i> Salvar e Gerar Relatório PDF</button>
+            </form>
+          </div>
+
+          <!-- ABA 2: BASE UNIFICADA -->
+          <div class="tab-pane fade" id="pills-base">
+            <h6 class="fw-bold text-secondary mb-3">Mapeamento Unificado de Linhas e Suportes (PE & GMA)</h6>
+            <div class="table-responsive">
+              <table class="table table-sm table-striped border align-middle small">
+                <thead class="table-light">
+                  <tr>
+                    <th>Unidade</th>
+                    <th>Linha</th>
+                    <th>Equipamento / Qtd</th>
+                    <th>Detalhes / Suporte</th>
+                  </tr>
+                </thead>
+                <tbody id="tabelaBaseUnificada"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- ABA 3: CONSULTA POR PERÍODO -->
+          <div class="tab-pane fade" id="pills-consulta">
+            <div class="bg-light p-3 rounded border mb-3">
+              <div class="row g-2 align-items-end">
+                <div class="col-5">
+                  <label class="form-label small fw-bold">Início</label>
+                  <input type="date" id="filtroInicio" class="form-control form-control-sm">
+                </div>
+                <div class="col-5">
+                  <label class="form-label small fw-bold">Fim</label>
+                  <input type="date" id="filtroFim" class="form-control form-control-sm">
+                </div>
+                <div class="col-2">
+                  <button type="button" class="btn btn-primary btn-sm w-100 fw-bold" onclick="filtrarPorPeriodo()" style="background-color:#004b93"><i class="bi bi-funnel"></i></button>
+                </div>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table table-hover align-middle border small">
+                <thead class="table-light">
+                  <tr>
+                    <th>Período</th>
+                    <th>Unidade / Linha</th>
+                    <th>Série</th>
+                    <th>Ação</th>
+                  </tr>
+                </thead>
+                <tbody id="tabelaResultados"></tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    const baseDadosUnificada = [
+      { unidade: "Jaboatão - PE (JGU)", linha: "Linha 02", equipamento: "FlowPack 01 a 04", detalhe: "4 de 4 instaladas (DLUT58260320, 0294, 0315, 0303)" },
+      { unidade: "Jaboatão - PE (JGU)", linha: "Linha 01", equipamento: "FlowPack 01 a 05", detalhe: "0 de 5 instaladas" },
+      { unidade: "Jaboatão - PE (JGU)", linha: "Linha 03 Cracker", equipamento: "FlowPack 01 a 04", detalhe: "0 de 4 instaladas" },
+      { unidade: "Jaboatão - PE (JGU)", linha: "Linha 04 Maisena", equipamento: "FlowPack 01 a 04", detalhe: "0 de 4 instaladas" },
+      { unidade: "Jaboatão - PE (JGU)", linha: "Linha 05 Laminados", equipamento: "FlowPack 01 a 03", detalhe: "0 de 3 instaladas" },
+      { unidade: "Jaboatão - PE (JGU)", linha: "Linha 06 Amanteigado", equipamento: "Portfólio / Flowpack (7 máq)", detalhe: "0 de 7 instaladas" },
+      { unidade: "Jaboatão - PE (JGU)", linha: "Linha 07 Granel", equipamento: "SBB 01 a 04", detalhe: "0 de 4 instaladas" },
+      { unidade: "Jaboatão - PE (JGU)", linha: "Linha 08 Biscoito", equipamento: "Bosch / Speedpack (8 máq)", detalhe: "0 de 8 instaladas" },
+      { unidade: "Jaboatão - PE (JGU)", linha: "Linha 09 Biscoito", equipamento: "GS 01 a 05 / Família", detalhe: "0 de 6 instaladas" },
+      { unidade: "Jaboatão - PE (JGU)", linha: "Linha 10 Biscoito", equipamento: "SIG / GS 01 a 06", detalhe: "0 de 7 instaladas" },
+      { unidade: "Jaboatão - PE (JGU)", linha: "Linha 14 Cracker", equipamento: "FlowPack 01 a 05", detalhe: "0 de 5 instaladas" },
+      { unidade: "Bahia (GMA)", linha: "LB01", equipamento: "3 datadores", detalhe: "Suporte Ext: 64.6cm | Int: 61.8cm" },
+      { unidade: "Bahia (GMA)", linha: "LB02", equipamento: "7 datadores", detalhe: "Suporte Ext: 49.4cm / 50.4cm" },
+      { unidade: "Bahia (GMA)", linha: "LB03", equipamento: "6 datadores", detalhe: "Suporte Ext: 49.8cm | Int: 47.5cm" },
+      { unidade: "Bahia (GMA)", linha: "LB04", equipamento: "5 datadores", detalhe: "Suporte Ext: 50cm / 64.1cm" },
+      { unidade: "Bahia (GMA)", linha: "LB05", equipamento: "3 datadores", detalhe: "Suporte Ext: 64.7cm | Int: 62.2cm" },
+      { unidade: "Bahia (GMA)", linha: "LB06", equipamento: "8 datadores", detalhe: "Suporte Ext: 64.9cm / 48.4cm" },
+      { unidade: "Bahia (GMA)", linha: "LM01", equipamento: "4 datadores", detalhe: "Suporte Ext: 58.5cm / 125cm" },
+      { unidade: "Bahia (GMA)", linha: "LM02", equipamento: "2 datadores", detalhe: "Suporte Ext: 65.5cm | Int: 63cm" },
+      { unidade: "Bahia (GMA)", linha: "LM03", equipamento: "1 datador", detalhe: "Suporte Ext: 55.5cm | Int: 53cm" },
+      { unidade: "Fortaleza", linha: "Linhas a definir", equipamento: "Em mapeamento", detalhe: "Aguardando envio dos dados" }
+    ];
+
+    function atualizarLinhasUnidade() {
+      const unidade = document.getElementById('unidade').value;
+      const selectLinha = document.getElementById('linha');
+      selectLinha.innerHTML = '<option value="" disabled selected>Selecione a linha...</option>';
+
+      const linhasFiltradas = baseDadosUnificada.filter(item => item.unidade === unidade);
+      linhasFiltradas.forEach(item => {
+        const opt = document.createElement('option');
+        opt.value = item.linha;
+        opt.textContent = `${item.linha} (${item.equipamento})`;
+        selectLinha.appendChild(opt);
+      });
+    }
+
+    function carregarBaseLinhas() {
+      const tbody = document.getElementById('tabelaBaseUnificada');
+      tbody.innerHTML = '';
+      baseDadosUnificada.forEach(item => {
+        tbody.innerHTML += `
+          <tr>
+            <td><strong>${item.unidade}</strong></td>
+            <td>${item.linha}</td>
+            <td>${item.equipamento}</td>
+            <td class="text-muted">${item.detalhe}</td>
+          </tr>
+        `;
+      });
+    }
+
+    function formatarData(data) {
+      if (!data) return '';
+      const [a, m, d] = data.split('-');
+      return `${d}/${m}/${a}`;
+    }
+
+    function salvarEGerarPDF(e) {
+      e.preventDefault();
+      const registro = {
+        id: Date.now(),
+        dataInicio: document.getElementById('dataInicio').value,
+        dataFim: document.getElementById('dataFim').value,
+        unidade: document.getElementById('unidade').value,
+        linha: document.getElementById('linha').value,
+        numSerie: document.getElementById('numSerie').value,
+        maquina: document.getElementById('maquina').value,
+        tecnico: document.getElementById('tecnico').value,
+        itens: []
+      };
+
+      document.querySelectorAll('.chk').forEach(input => {
+        const desc = input.nextElementSibling.innerText;
+        registro.itens.push({ descricao: desc, status: input.checked ? 'CONCLUÍDO (OK)' : 'PENDENTE' });
+      });
+
+      const historico = JSON.parse(localStorage.getItem('bd_mdias_unificado')) || [];
+      historico.push(registro);
+      localStorage.setItem('bd_mdias_unificado', JSON.stringify(historico));
+
+      alert("Validação salva com sucesso!");
+      gerarPDFRegistro(registro);
+    }
+
+    function gerarPDFRegistro(reg) {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      doc.setFillColor(0, 75, 147);
+      doc.rect(0, 0, 210, 18, 'F');
+      
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(13);
+      doc.setFont("helvetica", "bold");
+      doc.text("PROJETOS M. DIAS - RELATÓRIO DE INSTALAÇÃO", 105, 12, { align: "center" });
+
+      doc.setTextColor(40, 40, 40);
+      doc.setFontSize(9);
+      doc.setFont("helvetica", "normal");
+      doc.text(`Período: ${formatarData(reg.dataInicio)} até ${formatarData(reg.dataFim)}`, 10, 26);
+      doc.text(`Unidade: ${reg.unidade}  |  Linha: ${reg.linha}`, 10, 32);
+      doc.text(`Equipamento: ${reg.maquina}  |  Nº Série: ${reg.numSerie}  |  Técnico: ${reg.tecnico}`, 10, 38);
+
+      const rows = reg.itens.map(i => [i.descricao, i.status]);
+      doc.autoTable({
+        startY: 42,
+        head: [['Item Verificado', 'Status']],
+        body: rows,
+        theme: 'striped',
+        headStyles: { fillColor: [0, 75, 147] }
+      });
+
+      doc.save(`PROJETOS_MDIAS_${reg.unidade.split(' ')[0]}_${reg.numSerie}.pdf`);
+    }
+
+    function carregarHistoricoTabela(filtrados = null) {
+      const list = filtrados || JSON.parse(localStorage.getItem('bd_mdias_unificado')) || [];
+      const tbody = document.getElementById('tabelaResultados');
+      tbody.innerHTML = '';
+
+      if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" class="text-center text-muted py-3">Nenhum registro encontrado.</td></tr>`;
+        return;
+      }
+
+      list.forEach(r => {
+        tbody.innerHTML += `
+          <tr>
+            <td>${formatarData(r.dataInicio)} - ${formatarData(r.dataFim)}</td>
+            <td><strong>${r.unidade}</strong><br>${r.linha}</td>
+            <td>${r.numSerie}</td>
+            <td><button class="btn btn-sm btn-outline-primary" onclick='gerarPDFRegistro(${JSON.stringify(r)})'><i class="bi bi-file-pdf"></i> PDF</button></td>
+          </tr>
+        `;
+      });
+    }
+
+    function filtrarPorPeriodo() {
+      const inicio = document.getElementById('filtroInicio').value;
+      const fim = document.getElementById('filtroFim').value;
+      if (!inicio || !fim) return alert("Selecione ambas as datas para filtrar.");
+
+      const hist = JSON.parse(localStorage.getItem('bd_mdias_unificado')) || [];
+      const res = hist.filter(i => i.dataInicio >= inicio && i.dataFim <= fim);
+      carregarHistoricoTabela(res);
+    }
+  </script>
+</body>
+</html>
+
 
         <!-- Abas de Navegação -->
         <ul class="nav nav-pills nav-justified mb-4" id="pills-tab" role="tablist">
