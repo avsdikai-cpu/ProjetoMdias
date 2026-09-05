@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PROJETOS M. DIAS - Sistema Unificado</title>
+  <title>PROJETOS M. DIAS - Sistema Completo</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -11,11 +11,10 @@
   <style>
     :root { --primary: #004b93; --bg: #f4f6f9; }
     body { background-color: var(--bg); font-family: system-ui, -apple-system, sans-serif; }
-    .main-card { max-width: 950px; margin: 0 auto; border: none; border-top: 5px solid var(--primary); }
+    .main-card { max-width: 1050px; margin: 0 auto; border: none; border-top: 5px solid var(--primary); }
     .nav-pills .nav-link.active { background-color: var(--primary); }
-    .nav-pills .nav-link { color: var(--primary); }
-    .section-header { background-color: #eef4fa; color: var(--primary); font-size: 0.95rem; font-weight: 700; padding: 10px; border-radius: 6px; margin: 20px 0 10px 0; }
-    .kpi-card { border: 1px solid #e3e8ee; border-radius: 8px; background: #fff; padding: 12px; }
+    .nav-pills .nav-link { color: var(--primary); font-weight: 600; }
+    .section-header { background-color: #eef4fa; color: var(--primary); font-size: 0.95rem; font-weight: 700; padding: 10px; border-radius: 6px; margin: 15px 0 10px 0; }
   </style>
 </head>
 <body class="py-3 px-2">
@@ -27,175 +26,231 @@
         <!-- Cabeçalho -->
         <div class="text-center pb-3 mb-3 border-bottom">
           <h2 class="fw-bold text-primary m-0" style="color: #004b93 !important;">PROJETOS M. DIAS</h2>
-          <small class="text-muted fw-semibold">Gestão de Instalação de Datadores Laser (JGU • GMA • Fortaleza)</small>
+          <small class="text-muted fw-semibold">Gestão de Instalação, Suportes, Atividades e Teste de Potência</small>
         </div>
 
-        <!-- DASHBOARD DE PROGRESSO E METAS -->
-        <div class="row g-2 mb-4">
-          <div class="col-md-4">
-            <div class="kpi-card shadow-sm">
-              <div class="d-flex justify-content-between align-items-center mb-1">
-                <span class="fw-bold small text-primary">Jaboatão - PE (JGU)</span>
-                <span class="badge bg-primary">PE</span>
-              </div>
-              <h5 class="fw-bold mb-1" id="kpi-pe">4 / 81 <small class="fs-6 text-muted">instaladas</small></h5>
-              <div class="progress mb-2" style="height: 8px;">
-                <div class="progress-bar bg-success" role="progressbar" style="width: 5%"></div>
-              </div>
-              <small class="text-danger fw-semibold"><i class="bi bi-clock-history"></i> Faltam: 77 máquinas</small>
-            </div>
-          </div>
-
-          <div class="col-md-4">
-            <div class="kpi-card shadow-sm">
-              <div class="d-flex justify-content-between align-items-center mb-1">
-                <span class="fw-bold small text-warning text-dark">Bahia (GMA)</span>
-                <span class="badge bg-warning text-dark">BA</span>
-              </div>
-              <h5 class="fw-bold mb-1" id="kpi-gma">0 / 46 <small class="fs-6 text-muted">instaladas</small></h5>
-              <div class="progress mb-2" style="height: 8px;">
-                <div class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
-              </div>
-              <small class="text-danger fw-semibold"><i class="bi bi-clock-history"></i> Faltam: 46 máquinas</small>
-            </div>
-          </div>
-
-          <div class="col-md-4">
-            <div class="kpi-card shadow-sm">
-              <div class="d-flex justify-content-between align-items-center mb-1">
-                <span class="fw-bold small text-secondary">Fortaleza</span>
-                <span class="badge bg-secondary">CE</span>
-              </div>
-              <h5 class="fw-bold mb-1">-- / -- <small class="fs-6 text-muted">instaladas</small></h5>
-              <div class="progress mb-2" style="height: 8px;">
-                <div class="progress-bar bg-secondary" role="progressbar" style="width: 0%"></div>
-              </div>
-              <small class="text-muted fw-semibold"><i class="bi bi-dash-circle"></i> Aguardando dados</small>
-            </div>
-          </div>
-        </div>
-
-        <!-- Abas -->
-        <ul class="nav nav-pills nav-justified mb-3" id="pills-tab" role="tablist">
+        <!-- NAVEGAÇÃO COMPLETA -->
+        <ul class="nav nav-pills nav-justified mb-4" id="pills-tab" role="tablist">
           <li class="nav-item">
-            <button class="nav-link active fw-bold small" id="tab-form" data-bs-toggle="pill" data-bs-target="#pills-form"><i class="bi bi-file-earmark-plus"></i> Novo Check-list</button>
+            <button class="nav-link active small" id="tab-inst" data-bs-toggle="pill" data-bs-target="#pills-inst">
+              <i class="bi bi-tools"></i> 1. Instalação
+            </button>
           </li>
           <li class="nav-item">
-            <button class="nav-link fw-bold small" id="tab-base" data-bs-toggle="pill" data-bs-target="#pills-base" onclick="carregarBaseLinhas()"><i class="bi bi-database"></i> Base Unificada</button>
+            <button class="nav-link small" id="tab-suportes" data-bs-toggle="pill" data-bs-target="#pills-suportes">
+              <i class="bi bi-ruler"></i> 2. Suportes (PE & GMA)
+            </button>
           </li>
           <li class="nav-item">
-            <button class="nav-link fw-bold small" id="tab-consulta" data-bs-toggle="pill" data-bs-target="#pills-consulta" onclick="carregarHistoricoTabela()"><i class="bi bi-search"></i> Relatórios</button>
+            <button class="nav-link small" id="tab-ativ" data-bs-toggle="pill" data-bs-target="#pills-ativ">
+              <i class="bi bi-journal-check"></i> 3. Atividades / OS
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link small" id="tab-pot" data-bs-toggle="pill" data-bs-target="#pills-pot">
+              <i class="bi bi-lightning-charge"></i> 4. Teste de Potência
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link small" id="tab-rel" data-bs-toggle="pill" data-bs-target="#pills-rel" onclick="carregarRelatorios()">
+              <i class="bi bi-file-earmark-pdf"></i> Relatórios
+            </button>
           </li>
         </ul>
 
         <div class="tab-content">
           
-          <!-- ABA 1: FORMULÁRIO -->
-          <div class="tab-pane fade show active" id="pills-form">
-            <form id="checklistForm" onsubmit="salvarEGerarPDF(event)">
-              
-              <div class="section-header"><i class="bi bi-geo-alt-fill"></i> 1. Identificação e Unidade</div>
+          <!-- ABA 1: INSTALAÇÕES (Aba Instalação da planilha) -->
+          <div class="tab-pane fade show active" id="pills-inst">
+            <form onsubmit="salvarGenerico(event, 'Instalação')">
+              <div class="section-header"><i class="bi bi-geo-alt-fill"></i> Registro de Instalação e Teste</div>
               <div class="row g-2 mb-2">
                 <div class="col-md-6">
-                  <label class="form-label small fw-bold">Unidade Industrial</label>
-                  <select id="unidade" class="form-select" onchange="atualizarLinhasUnidade()" required>
-                    <option value="" disabled selected>Selecione a unidade...</option>
+                  <label class="form-label small fw-bold">Unidade</label>
+                  <select class="form-select select-unid" required onchange="popularLinhas(this, 'lin-inst')">
+                    <option value="" disabled selected>Selecione...</option>
                     <option value="Jaboatão - PE (JGU)">Jaboatão - PE (JGU)</option>
                     <option value="Bahia (GMA)">Bahia (GMA)</option>
                     <option value="Fortaleza">Fortaleza</option>
                   </select>
                 </div>
                 <div class="col-md-6">
-                  <label class="form-label small fw-bold">Linha de Produção</label>
-                  <select id="linha" class="form-select" required>
-                    <option value="" disabled selected>Selecione a unidade primeiro...</option>
+                  <label class="form-label small fw-bold">Linha</label>
+                  <select id="lin-inst" class="form-select select-lin" required></select>
+                </div>
+              </div>
+
+              <div class="row g-2 mb-2">
+                <div class="col-md-4"><label class="form-label small fw-bold">Equipamento</label><input type="text" class="form-control eq" placeholder="Ex: FlowPack 01 / SBB / GS" required></div>
+                <div class="col-md-4"><label class="form-label small fw-bold">Nº de Série</label><input type="text" class="form-control serie" required></div>
+                <div class="col-md-4"><label class="form-label small fw-bold">Data da Instalação e Teste</label><input type="date" class="form-control dt-inst" required></div>
+              </div>
+
+              <div class="row g-2 mb-2">
+                <div class="col-md-6"><label class="form-label small fw-bold">Técnico Executor</label><input type="text" class="form-control tec" required></div>
+                <div class="col-md-6"><label class="form-label small fw-bold">Status da Instalação</label>
+                  <select class="form-select st-inst">
+                    <option value="Concluído e Testado">Concluído e Testado</option>
+                    <option value="Em Andamento">Em Andamento</option>
+                    <option value="Pendente de Teste">Pendente de Teste</option>
+                  </select>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary w-100 fw-bold mt-3 py-2" style="background-color:#004b93"><i class="bi bi-save"></i> Salvar Instalação e Gerar PDF</button>
+            </form>
+          </div>
+
+          <!-- ABA 2: SUPORTES E LARGURAS (Aba Largura_Suportes_LDU580 + GMA) -->
+          <div class="tab-pane fade" id="pills-suportes">
+            <form onsubmit="salvarGenerico(event, 'Medição de Suporte')">
+              <div class="section-header"><i class="bi bi-ruler"></i> Mapeamento e Medidas de Suporte (LDU580 / Estrutura)</div>
+              <div class="row g-2 mb-2">
+                <div class="col-md-6">
+                  <label class="form-label small fw-bold">Unidade</label>
+                  <select class="form-select select-unid" required onchange="popularLinhas(this, 'lin-sup')">
+                    <option value="" disabled selected>Selecione...</option>
+                    <option value="Jaboatão - PE (JGU)">Jaboatão - PE (JGU)</option>
+                    <option value="Bahia (GMA)">Bahia (GMA)</option>
+                    <option value="Fortaleza">Fortaleza</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label small fw-bold">Linha</label>
+                  <select id="lin-sup" class="form-select select-lin" required></select>
+                </div>
+              </div>
+
+              <div class="row g-2 mb-2">
+                <div class="col-md-3"><label class="form-label small fw-bold">Largura PE (mm)</label><input type="number" class="form-control larg-mm" placeholder="Ex: 730 mm"></div>
+                <div class="col-md-3"><label class="form-label small fw-bold">Comprim. Externo BA (cm)</label><input type="number" step="0.1" class="form-control comp-ext" placeholder="Ex: 64.6 cm"></div>
+                <div class="col-md-3"><label class="form-label small fw-bold">Comprim. Interno BA (cm)</label><input type="number" step="0.1" class="form-control comp-int" placeholder="Ex: 61.8 cm"></div>
+                <div class="col-md-3"><label class="form-label small fw-bold">Quantidade de Datadores</label><input type="number" class="form-control qtd-dat" placeholder="Ex: 3"></div>
+              </div>
+
+              <div class="row g-2 mb-2">
+                <div class="col-md-6"><label class="form-label small fw-bold">Tipo de Aplicação (Máquina / Enfardadeira)</label><input type="text" class="form-control tipo-app" placeholder="Ex: Embalagem Máq1 / Enfardadeira Máq2"></div>
+                <div class="col-md-6"><label class="form-label small fw-bold">Suporte Instalado?</label>
+                  <select class="form-select sup-inst">
+                    <option value="Sim">Sim</option>
+                    <option value="Não">Não</option>
+                    <option value="Suporte Diferente do Padrão">Suporte Diferente do Padrão</option>
+                  </select>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary w-100 fw-bold mt-3 py-2" style="background-color:#004b93"><i class="bi bi-save"></i> Salvar Medidas de Suporte</button>
+            </form>
+          </div>
+
+          <!-- ABA 3: ATIVIDADES / OS / MANUTENÇÃO (Aba Atividades + Aba Manutenção) -->
+          <div class="tab-pane fade" id="pills-ativ">
+            <form onsubmit="salvarGenerico(event, 'Atividade / OS / Manutenção')">
+              <div class="section-header"><i class="bi bi-journal-text"></i> Registro de Atividades, OS e Manutenção</div>
+              <div class="row g-2 mb-2">
+                <div class="col-md-6">
+                  <label class="form-label small fw-bold">Unidade</label>
+                  <select class="form-select select-unid" required onchange="popularLinhas(this, 'lin-atv')">
+                    <option value="" disabled selected>Selecione...</option>
+                    <option value="Jaboatão - PE (JGU)">Jaboatão - PE (JGU)</option>
+                    <option value="Bahia (GMA)">Bahia (GMA)</option>
+                    <option value="Fortaleza">Fortaleza</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label small fw-bold">Linha</label>
+                  <select id="lin-atv" class="form-select select-lin" required></select>
+                </div>
+              </div>
+
+              <div class="row g-2 mb-2">
+                <div class="col-md-4"><label class="form-label small fw-bold">Nº Serie da Máquina</label><input type="text" class="form-control serie" required></div>
+                <div class="col-md-4"><label class="form-label small fw-bold">Tipo de Atividade</label>
+                  <select class="form-select tipo-ativ">
+                    <option value="Manutenção Preventiva">Manutenção Preventiva</option>
+                    <option value="Manutenção Corretiva">Manutenção Corretiva</option>
+                    <option value="Instalação de Suporte">Instalação de Suporte</option>
+                    <option value="Ajuste / Calibração">Ajuste / Calibração</option>
+                  </select>
+                </div>
+                <div class="col-md-4"><label class="form-label small fw-bold">Status da Máquina</label>
+                  <select class="form-select st-maq">
+                    <option value="Operacional">Operacional</option>
+                    <option value="Parada">Parada</option>
+                    <option value="Em Teste">Em Teste</option>
                   </select>
                 </div>
               </div>
 
               <div class="row g-2 mb-2">
-                <div class="col-6">
-                  <label class="form-label small fw-bold">Data Inicial</label>
-                  <input type="date" id="dataInicio" class="form-control" required>
+                <div class="col-md-6"><label class="form-label small fw-bold">Descrição do Serviço</label><textarea class="form-control desc" rows="2"></textarea></div>
+                <div class="col-md-6"><label class="form-label small fw-bold">Relatório Técnico / Peças Substituídas</label><textarea class="form-control rel-tec" rows="2" placeholder="Peças trocadas, observations..."></textarea></div>
+              </div>
+
+              <div class="row g-2 mb-2">
+                <div class="col-md-6"><label class="form-label small fw-bold">Técnico Executor</label><input type="text" class="form-control tec" required></div>
+                <div class="col-md-6"><label class="form-label small fw-bold">Status da OS</label>
+                  <select class="form-select st-os">
+                    <option value="Concluída">Concluída</option>
+                    <option value="Pendente">Pendente</option>
+                    <option value="Aguardando Peça">Aguardando Peça</option>
+                  </select>
                 </div>
-                <div class="col-6">
-                  <label class="form-label small fw-bold">Data Final</label>
-                  <input type="date" id="dataFim" class="form-control" required>
+              </div>
+
+              <button type="submit" class="btn btn-primary w-100 fw-bold mt-3 py-2" style="background-color:#004b93"><i class="bi bi-save"></i> Salvar Atividade / OS</button>
+            </form>
+          </div>
+
+          <!-- ABA 4: TESTE DE POTÊNCIA -->
+          <div class="tab-pane fade" id="pills-pot">
+            <form onsubmit="salvarGenerico(event, 'Teste de Potência')">
+              <div class="section-header"><i class="bi bi-lightning-charge-fill"></i> Aferição de Potência do Laser</div>
+              <div class="row g-2 mb-2">
+                <div class="col-md-6">
+                  <label class="form-label small fw-bold">Unidade</label>
+                  <select class="form-select select-unid" required onchange="popularLinhas(this, 'lin-pot')">
+                    <option value="" disabled selected>Selecione...</option>
+                    <option value="Jaboatão - PE (JGU)">Jaboatão - PE (JGU)</option>
+                    <option value="Bahia (GMA)">Bahia (GMA)</option>
+                    <option value="Fortaleza">Fortaleza</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label small fw-bold">Linha</label>
+                  <select id="lin-pot" class="form-select select-lin" required></select>
                 </div>
               </div>
 
               <div class="row g-2 mb-2">
-                <div class="col-md-4">
-                  <label class="form-label small fw-bold">Nº de Série</label>
-                  <input type="text" id="numSerie" class="form-control" placeholder="Ex: DLUT58260320" required>
-                </div>
-                <div class="col-md-4">
-                  <label class="form-label small fw-bold">Equipamento</label>
-                  <input type="text" id="maquina" class="form-control" placeholder="Ex: Flowpack 01" required>
-                </div>
-                <div class="col-md-4">
-                  <label class="form-label small fw-bold">Técnico Responsável</label>
-                  <input type="text" id="tecnico" class="form-control" placeholder="Nome do técnico" required>
-                </div>
+                <div class="col-md-4"><label class="form-label small fw-bold">Nº de Série</label><input type="text" class="form-control serie" required></div>
+                <div class="col-md-4"><label class="form-label small fw-bold">Potência Nominal (W)</label><input type="number" class="form-control pot-nom" placeholder="Ex: 30" required></div>
+                <div class="col-md-4"><label class="form-label small fw-bold">Potência Medida (W)</label><input type="number" step="0.1" class="form-control pot-med" placeholder="Ex: 28.5" required></div>
               </div>
 
-              <div class="section-header"><i class="bi bi-check2-square"></i> 2. Itens de Inspeção Técnica</div>
-              <div class="form-check p-2 border-bottom"><input type="checkbox" class="form-check-input chk" id="f0_1"><label class="form-check-label small" for="f0_1">Chapa de Fixação e Suporte do Laser instalado corretamente</label></div>
-              <div class="form-check p-2 border-bottom"><input type="checkbox" class="form-check-input chk" id="iq_1"><label class="form-check-label small" for="iq_1">Elétrica e Redes: Disjuntor 10A e cabo Ethernet conectados</label></div>
-              <div class="form-check p-2 border-bottom"><input type="checkbox" class="form-check-input chk" id="oq_1"><label class="form-check-label small" for="oq_1">Teste de Impressão: Código gravado corretamente no filme</label></div>
-              <div class="form-check p-2 border-bottom"><input type="checkbox" class="form-check-input chk" id="pq_1"><label class="form-check-label small" for="pq_1">Validação: Teste contínuo de produção e normas NR-12 ok</label></div>
+              <div class="row g-2 mb-2">
+                <div class="col-md-6"><label class="form-label small fw-bold">Técnico Aferidor</label><input type="text" class="form-control tec" required></div>
+                <div class="col-md-6"><label class="form-label small fw-bold">Data da Aferição</label><input type="date" class="form-control dt-af" required></div>
+              </div>
 
-              <button type="submit" class="btn btn-primary w-100 fw-bold mt-3 py-2" style="background-color:#004b93"><i class="bi bi-disk-fill"></i> Salvar e Gerar Relatório PDF</button>
+              <button type="submit" class="btn btn-primary w-100 fw-bold mt-3 py-2" style="background-color:#004b93"><i class="bi bi-save"></i> Salvar Teste de Potência</button>
             </form>
           </div>
 
-          <!-- ABA 2: BASE UNIFICADA -->
-          <div class="tab-pane fade" id="pills-base">
-            <h6 class="fw-bold text-secondary mb-3">Mapeamento Unificado de Linhas e Suportes (PE & GMA)</h6>
-            <div class="table-responsive">
-              <table class="table table-sm table-striped border align-middle small">
-                <thead class="table-light">
-                  <tr>
-                    <th>Unidade</th>
-                    <th>Linha</th>
-                    <th>Equipamento / Qtd</th>
-                    <th>Detalhes / Suporte</th>
-                  </tr>
-                </thead>
-                <tbody id="tabelaBaseUnificada"></tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- ABA 3: CONSULTA POR PERÍODO -->
-          <div class="tab-pane fade" id="pills-consulta">
-            <div class="bg-light p-3 rounded border mb-3">
-              <div class="row g-2 align-items-end">
-                <div class="col-5">
-                  <label class="form-label small fw-bold">Início</label>
-                  <input type="date" id="filtroInicio" class="form-control form-control-sm">
-                </div>
-                <div class="col-5">
-                  <label class="form-label small fw-bold">Fim</label>
-                  <input type="date" id="filtroFim" class="form-control form-control-sm">
-                </div>
-                <div class="col-2">
-                  <button type="button" class="btn btn-primary btn-sm w-100 fw-bold" onclick="filtrarPorPeriodo()" style="background-color:#004b93"><i class="bi bi-funnel"></i></button>
-                </div>
-              </div>
-            </div>
-
+          <!-- ABA 5: HISTÓRICO DE RELATÓRIOS -->
+          <div class="tab-pane fade" id="pills-rel">
             <div class="table-responsive">
               <table class="table table-hover align-middle border small">
                 <thead class="table-light">
                   <tr>
-                    <th>Período</th>
+                    <th>Data / Reg</th>
+                    <th>Tipo</th>
                     <th>Unidade / Linha</th>
-                    <th>Série</th>
+                    <th>Nº Série</th>
                     <th>Ação</th>
                   </tr>
                 </thead>
-                <tbody id="tabelaResultados"></tbody>
+                <tbody id="tabelaRelatorios"></tbody>
               </table>
             </div>
           </div>
@@ -209,448 +264,145 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
-    const baseDadosUnificada = [
-      { unidade: "Jaboatão - PE (JGU)", linha: "Linha 02", equipamento: "FlowPack 01 a 04", detalhe: "4 de 4 instaladas (DLUT58260320, 0294, 0315, 0303)" },
-      { unidade: "Jaboatão - PE (JGU)", linha: "Linha 01", equipamento: "FlowPack 01 a 05", detalhe: "0 de 5 instaladas" },
-      { unidade: "Jaboatão - PE (JGU)", linha: "Linha 03 Cracker", equipamento: "FlowPack 01 a 04", detalhe: "0 de 4 instaladas" },
-      { unidade: "Jaboatão - PE (JGU)", linha: "Linha 04 Maisena", equipamento: "FlowPack 01 a 04", detalhe: "0 de 4 instaladas" },
-      { unidade: "Jaboatão - PE (JGU)", linha: "Linha 05 Laminados", equipamento: "FlowPack 01 a 03", detalhe: "0 de 3 instaladas" },
-      { unidade: "Jaboatão - PE (JGU)", linha: "Linha 06 Amanteigado", equipamento: "Portfólio / Flowpack (7 máq)", detalhe: "0 de 7 instaladas" },
-      { unidade: "Jaboatão - PE (JGU)", linha: "Linha 07 Granel", equipamento: "SBB 01 a 04", detalhe: "0 de 4 instaladas" },
-      { unidade: "Jaboatão - PE (JGU)", linha: "Linha 08 Biscoito", equipamento: "Bosch / Speedpack (8 máq)", detalhe: "0 de 8 instaladas" },
-      { unidade: "Jaboatão - PE (JGU)", linha: "Linha 09 Biscoito", equipamento: "GS 01 a 05 / Família", detalhe: "0 de 6 instaladas" },
-      { unidade: "Jaboatão - PE (JGU)", linha: "Linha 10 Biscoito", equipamento: "SIG / GS 01 a 06", detalhe: "0 de 7 instaladas" },
-      { unidade: "Jaboatão - PE (JGU)", linha: "Linha 14 Cracker", equipamento: "FlowPack 01 a 05", detalhe: "0 de 5 instaladas" },
-      { unidade: "Bahia (GMA)", linha: "LB01", equipamento: "3 datadores", detalhe: "Suporte Ext: 64.6cm | Int: 61.8cm" },
-      { unidade: "Bahia (GMA)", linha: "LB02", equipamento: "7 datadores", detalhe: "Suporte Ext: 49.4cm / 50.4cm" },
-      { unidade: "Bahia (GMA)", linha: "LB03", equipamento: "6 datadores", detalhe: "Suporte Ext: 49.8cm | Int: 47.5cm" },
-      { unidade: "Bahia (GMA)", linha: "LB04", equipamento: "5 datadores", detalhe: "Suporte Ext: 50cm / 64.1cm" },
-      { unidade: "Bahia (GMA)", linha: "LB05", equipamento: "3 datadores", detalhe: "Suporte Ext: 64.7cm | Int: 62.2cm" },
-      { unidade: "Bahia (GMA)", linha: "LB06", equipamento: "8 datadores", detalhe: "Suporte Ext: 64.9cm / 48.4cm" },
-      { unidade: "Bahia (GMA)", linha: "LM01", equipamento: "4 datadores", detalhe: "Suporte Ext: 58.5cm / 125cm" },
-      { unidade: "Bahia (GMA)", linha: "LM02", equipamento: "2 datadores", detalhe: "Suporte Ext: 65.5cm | Int: 63cm" },
-      { unidade: "Bahia (GMA)", linha: "LM03", equipamento: "1 datador", detalhe: "Suporte Ext: 55.5cm | Int: 53cm" },
-      { unidade: "Fortaleza", linha: "Linhas a definir", equipamento: "Em mapeamento", detalhe: "Aguardando envio dos dados" }
-    ];
+    const mapaLinhas = {
+      "Jaboatão - PE (JGU)": ["Linha 01", "Linha 02", "Linha 03 Cracker", "Linha 04 Maisena", "Linha 05 Laminados", "Linha 06 Amanteigado", "Linha 07 Granel", "Linha 08 Biscoito", "Linha 09 Biscoito", "Linha 10 Biscoito", "Linha 14 Cracker", "Linha 03 Wafer", "Linha 02 D-Tone", "Linha 04 Massas", "Linha 03 Lasanha", "Linha 05 Massas Lame", "Linha 06 Massas", "Linha 09 Massas 02"],
+      "Bahia (GMA)": ["LB01", "LB02", "LB03", "LB04", "LB05", "LB06", "LM01", "LM02", "LM03", "LM04", "LM05"],
+      "Fortaleza": ["Linha 01", "Linha 02", "Linha 03"]
+    };
 
-    function atualizarLinhasUnidade() {
-      const unidade = document.getElementById('unidade').value;
-      const selectLinha = document.getElementById('linha');
-      selectLinha.innerHTML = '<option value="" disabled selected>Selecione a linha...</option>';
+    function popularLinhas(elemUnidade, targetId) {
+      const unidade = elemUnidade.value;
+      const target = document.getElementById(targetId);
+      target.innerHTML = '<option value="" disabled selected>Selecione a linha...</option>';
 
-      const linhasFiltradas = baseDadosUnificada.filter(item => item.unidade === unidade);
-      linhasFiltradas.forEach(item => {
-        const opt = document.createElement('option');
-        opt.value = item.linha;
-        opt.textContent = `${item.linha} (${item.equipamento})`;
-        selectLinha.appendChild(opt);
-      });
+      if (mapaLinhas[unidade]) {
+        mapaLinhas[unidade].forEach(l => {
+          const opt = document.createElement('option');
+          opt.value = l;
+          opt.textContent = l;
+          target.appendChild(opt);
+        });
+      }
     }
 
-    function carregarBaseLinhas() {
-      const tbody = document.getElementById('tabelaBaseUnificada');
-      tbody.innerHTML = '';
-      baseDadosUnificada.forEach(item => {
-        tbody.innerHTML += `
-          <tr>
-            <td><strong>${item.unidade}</strong></td>
-            <td>${item.linha}</td>
-            <td>${item.equipamento}</td>
-            <td class="text-muted">${item.detalhe}</td>
-          </tr>
-        `;
-      });
-    }
-
-    function formatarData(data) {
-      if (!data) return '';
-      const [a, m, d] = data.split('-');
-      return `${d}/${m}/${a}`;
-    }
-
-    function salvarEGerarPDF(e) {
+    function salvarGenerico(e, tipo) {
       e.preventDefault();
-      const registro = {
+      const form = e.target;
+      
+      const reg = {
         id: Date.now(),
-        dataInicio: document.getElementById('dataInicio').value,
-        dataFim: document.getElementById('dataFim').value,
-        unidade: document.getElementById('unidade').value,
-        linha: document.getElementById('linha').value,
-        numSerie: document.getElementById('numSerie').value,
-        maquina: document.getElementById('maquina').value,
-        tecnico: document.getElementById('tecnico').value,
-        itens: []
+        dataHora: new Date().toLocaleString('pt-BR'),
+        tipo: tipo,
+        unidade: form.querySelector('.select-unid').value,
+        linha: form.querySelector('.select-lin').value,
+        numSerie: form.querySelector('.serie') ? form.querySelector('.serie').value : '-',
+        tecnico: form.querySelector('.tec') ? form.querySelector('.tec').value : '-',
+        equipamento: form.querySelector('.eq') ? form.querySelector('.eq').value : '-',
+        larguraMM: form.querySelector('.larg-mm') ? form.querySelector('.larg-mm').value : '-',
+        compExt: form.querySelector('.comp-ext') ? form.querySelector('.comp-ext').value : '-',
+        compInt: form.querySelector('.comp-int') ? form.querySelector('.comp-int').value : '-',
+        qtdDatadores: form.querySelector('.qtd-dat') ? form.querySelector('.qtd-dat').value : '-',
+        tipoApp: form.querySelector('.tipo-app') ? form.querySelector('.tipo-app').value : '-',
+        tipoAtiv: form.querySelector('.tipo-ativ') ? form.querySelector('.tipo-ativ').value : '-',
+        stMaq: form.querySelector('.st-maq') ? form.querySelector('.st-maq').value : '-',
+        stOS: form.querySelector('.st-os') ? form.querySelector('.st-os').value : '-',
+        descricao: form.querySelector('.desc') ? form.querySelector('.desc').value : '-',
+        relTecnico: form.querySelector('.rel-tec') ? form.querySelector('.rel-tec').value : '-',
+        potNominal: form.querySelector('.pot-nom') ? form.querySelector('.pot-nom').value : '-',
+        potMedida: form.querySelector('.pot-med') ? form.querySelector('.pot-med').value : '-'
       };
 
-      document.querySelectorAll('.chk').forEach(input => {
-        const desc = input.nextElementSibling.innerText;
-        registro.itens.push({ descricao: desc, status: input.checked ? 'CONCLUÍDO (OK)' : 'PENDENTE' });
-      });
+      const bd = JSON.parse(localStorage.getItem('bd_mdias_planilhas')) || [];
+      bd.push(reg);
+      localStorage.setItem('bd_mdias_planilhas', JSON.stringify(bd));
 
-      const historico = JSON.parse(localStorage.getItem('bd_mdias_unificado')) || [];
-      historico.push(registro);
-      localStorage.setItem('bd_mdias_unificado', JSON.stringify(historico));
-
-      alert("Validação salva com sucesso!");
-      gerarPDFRegistro(registro);
+      alert(`${tipo} salvo com sucesso!`);
+      gerarPDF(reg);
     }
 
-    function gerarPDFRegistro(reg) {
+    function gerarPDF(reg) {
       const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
+      doc = new jsPDF();
 
       doc.setFillColor(0, 75, 147);
       doc.rect(0, 0, 210, 18, 'F');
       
       doc.setTextColor(255, 255, 255);
-      doc.setFontSize(13);
+      doc.setFontSize(12);
       doc.setFont("helvetica", "bold");
-      doc.text("PROJETOS M. DIAS - RELATÓRIO DE INSTALAÇÃO", 105, 12, { align: "center" });
+      doc.text(`PROJETOS M. DIAS - RELATÓRIO DE ${reg.tipo.toUpperCase()}`, 105, 12, { align: "center" });
 
       doc.setTextColor(40, 40, 40);
-      doc.setFontSize(9);
+      doc.setFontSize(10);
       doc.setFont("helvetica", "normal");
-      doc.text(`Período: ${formatarData(reg.dataInicio)} até ${formatarData(reg.dataFim)}`, 10, 26);
-      doc.text(`Unidade: ${reg.unidade}  |  Linha: ${reg.linha}`, 10, 32);
-      doc.text(`Equipamento: ${reg.maquina}  |  Nº Série: ${reg.numSerie}  |  Técnico: ${reg.tecnico}`, 10, 38);
+      
+      doc.text(`Data/Hora: ${reg.dataHora}`, 14, 28);
+      doc.text(`Unidade: ${reg.unidade}  |  Linha: ${reg.linha}`, 14, 34);
+      doc.text(`Nº Série: ${reg.numSerie}  |  Técnico: ${reg.tecnico}`, 14, 40);
 
-      const rows = reg.itens.map(i => [i.descricao, i.status]);
+      let linhas = [];
+      if (reg.tipo === 'Instalação') {
+        linhas = [
+          ['Equipamento', reg.equipamento],
+          ['Data Instalação', reg.dataHora],
+          ['Status', 'Instalação e Teste Concluídos']
+        ];
+      } else if (reg.tipo === 'Medição de Suporte') {
+        linhas = [
+          ['Largura PE (mm)', reg.larguraMM],
+          ['Comprimento Ext. BA (cm)', reg.compExt],
+          ['Comprimento Int. BA (cm)', reg.compInt],
+          ['Quantidade de Datadores', reg.qtdDatadores],
+          ['Aplicação', reg.tipoApp]
+        ];
+      } else if (reg.tipo === 'Atividade / OS / Manutenção') {
+        linhas = [
+          ['Tipo de Atividade', reg.tipoAtiv],
+          ['Status da Máquina', reg.stMaq],
+          ['Status da OS', reg.stOS],
+          ['Descrição do Serviço', reg.descricao],
+          ['Relatório Técnico / Peças', reg.relTecnico]
+        ];
+      } else if (reg.tipo === 'Teste de Potência') {
+        linhas = [
+          ['Potência Nominal', `${reg.potNominal} W`],
+          ['Potência Medida', `${reg.potMedida} W`],
+          ['Resultado', parseFloat(reg.potMedida) >= (parseFloat(reg.potNominal) * 0.8) ? 'APROVADO' : 'ATENÇÃO']
+        ];
+      }
+
       doc.autoTable({
-        startY: 42,
-        head: [['Item Verificado', 'Status']],
-        body: rows,
+        startY: 46,
+        head: [['Campo / Parâmetro', 'Valor / Informação']],
+        body: linhas,
         theme: 'striped',
         headStyles: { fillColor: [0, 75, 147] }
       });
 
-      doc.save(`PROJETOS_MDIAS_${reg.unidade.split(' ')[0]}_${reg.numSerie}.pdf`);
+      doc.save(`MDIAS_${reg.unidade.split(' ')[0]}_${reg.numSerie}.pdf`);
     }
 
-    function carregarHistoricoTabela(filtrados = null) {
-      const list = filtrados || JSON.parse(localStorage.getItem('bd_mdias_unificado')) || [];
-      const tbody = document.getElementById('tabelaResultados');
+    function carregarRelatorios() {
+      const list = JSON.parse(localStorage.getItem('bd_mdias_planilhas')) || [];
+      const tbody = document.getElementById('tabelaRelatorios');
       tbody.innerHTML = '';
 
       if (list.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="4" class="text-center text-muted py-3">Nenhum registro encontrado.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted py-3">Nenhum registro encontrado.</td></tr>`;
         return;
       }
 
       list.forEach(r => {
         tbody.innerHTML += `
           <tr>
-            <td>${formatarData(r.dataInicio)} - ${formatarData(r.dataFim)}</td>
+            <td>${r.dataHora}</td>
+            <td><span class="badge bg-primary">${r.tipo}</span></td>
             <td><strong>${r.unidade}</strong><br>${r.linha}</td>
             <td>${r.numSerie}</td>
-            <td><button class="btn btn-sm btn-outline-primary" onclick='gerarPDFRegistro(${JSON.stringify(r)})'><i class="bi bi-file-pdf"></i> PDF</button></td>
+            <td><button class="btn btn-sm btn-outline-primary" onclick='gerarPDF(${JSON.stringify(r)})'><i class="bi bi-file-pdf"></i> PDF</button></td>
           </tr>
         `;
       });
-    }
-
-    function filtrarPorPeriodo() {
-      const inicio = document.getElementById('filtroInicio').value;
-      const fim = document.getElementById('filtroFim').value;
-      if (!inicio || !fim) return alert("Selecione ambas as datas para filtrar.");
-
-      const hist = JSON.parse(localStorage.getItem('bd_mdias_unificado')) || [];
-      const res = hist.filter(i => i.dataInicio >= inicio && i.dataFim <= fim);
-      carregarHistoricoTabela(res);
-    }
-  </script>
-</body>
-</html>
-
-
-        <!-- Abas de Navegação -->
-        <ul class="nav nav-pills nav-justified mb-4" id="pills-tab" role="tablist">
-          <li class="nav-item" role="presentation">
-            <button class="nav-link active fw-bold" id="tab-form" data-bs-toggle="pill" data-bs-target="#pills-form" type="button"><i class="bi bi-file-earmark-plus"></i> Novo Check-list</button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button class="nav-link fw-bold" id="tab-consulta" data-bs-toggle="pill" data-bs-target="#pills-consulta" type="button" onclick="carregarHistoricoTabela()"><i class="bi bi-search"></i> Consultar por Período</button>
-          </li>
-        </ul>
-
-        <div class="tab-content" id="pills-tabContent">
-          
-          <!-- ABA 1: FORMULÁRIO -->
-          <div class="tab-pane fade show active" id="pills-form">
-            <h1 class="h5 text-center fw-bold text-dark mb-4">CHECK-LIST DE INSTALAÇÃO - DATADORES LASER (v7)</h1>
-
-            <form id="checklistForm" onsubmit="salvarEGerarPDF(event)">
-              <div class="section-header d-flex align-items-center gap-2">
-                <i class="bi bi-calendar-range-fill"></i>
-                <span>1. Identificação e Período da Instalação</span>
-              </div>
-
-              <div class="row g-3 mb-3">
-                <div class="col-md-6">
-                  <label class="form-label fw-bold text-secondary small">Data Inicial da Instalação</label>
-                  <input type="date" id="dataInicio" class="form-control" required>
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label fw-bold text-secondary small">Data Final da Instalação</label>
-                  <input type="date" id="dataFim" class="form-control" required>
-                </div>
-              </div>
-
-              <div class="mb-3">
-                <label class="form-label fw-bold text-secondary small">Unidade Industrial</label>
-                <select id="unidade" class="form-select" required>
-                  <option value="" disabled selected>Selecione a unidade...</option>
-                  <option value="Jaboatão - PE (JGU)">Jaboatão - PE (JGU)</option>
-                  <option value="Bahia (GMA)">Bahia (GMA)</option>
-                  <option value="Fortaleza">Fortaleza</option>
-                </select>
-              </div>
-
-              <div class="row g-3 mb-3">
-                <div class="col-md-6">
-                  <label class="form-label fw-bold text-secondary small">Linha de Produção</label>
-                  <input type="text" id="linha" class="form-control" placeholder="Ex: Linha 02" required>
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label fw-bold text-secondary small">Nº de Série do Datador</label>
-                  <input type="text" id="numSerie" class="form-control" placeholder="Ex: DKA-2026-X" required>
-                </div>
-              </div>
-
-              <div class="row g-3 mb-3">
-                <div class="col-md-6">
-                  <label class="form-label fw-bold text-secondary small">Máquina</label>
-                  <select id="maquina" class="form-select" required>
-                    <option value="Flowpack">Flowpack</option>
-                    <option value="Portfolio">Portfolio</option>
-                  </select>
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label fw-bold text-secondary small">Técnico Responsável</label>
-                  <input type="text" id="tecnico" class="form-control" placeholder="Seu nome" required>
-                </div>
-              </div>
-
-              <!-- Fase 0 -->
-              <div class="section-header d-flex align-items-center gap-2">
-                <i class="bi bi-box-seam-fill"></i>
-                <span>Fase 0 - Conferência de Materiais e Peças</span>
-              </div>
-              <div class="check-item form-check"><input type="checkbox" class="form-check-input chk" id="f0_1"><label class="form-check-label w-100" for="f0_1">Chapa de Fixação dos Rolos (2 un.) - Suporte metálico</label></div>
-              <div class="check-item form-check"><input type="checkbox" class="form-check-input chk" id="f0_2"><label class="form-check-label w-100" for="f0_2">Pad de Estabilização (1 un.) - Placa de alinhamento da embalagem</label></div>
-              <div class="check-item form-check"><input type="checkbox" class="form-check-input chk" id="f0_3"><label class="form-check-label w-100" for="f0_3">Conjunto de Fixação do Cabeçote (1 un.) - Suporte principal do laser</label></div>
-              <div class="check-item form-check"><input type="checkbox" class="form-check-input chk" id="f0_4"><label class="form-check-label w-100" for="f0_4">Rolo de Borracha (1 un.) - Rolo de tráfego do filme</label></div>
-              <div class="check-item form-check"><input type="checkbox" class="form-check-input chk" id="f0_5"><label class="form-check-label w-100" for="f0_5">Rolos Fixos (4 un.) e Rolos Livres (4 un.) - Guias do filme</label></div>
-
-              <!-- Fase 1 - IQ -->
-              <div class="section-header d-flex align-items-center gap-2">
-                <i class="bi bi-tools"></i>
-                <span>Fase 1 - Inspeção Técnica da Instalação (IQ)</span>
-              </div>
-              <div class="check-item form-check"><input type="checkbox" class="form-check-input chk" id="iq_1"><label class="form-check-label w-100" for="iq_1">Estrutura: Furações originais mantidas sem danificar o equipamento</label></div>
-              <div class="check-item form-check"><input type="checkbox" class="form-check-input chk" id="iq_2"><label class="form-check-label w-100" for="iq_2">Posicionamento: Laser montado voltado para baixo com calços de 15 mm</label></div>
-              <div class="check-item form-check"><input type="checkbox" class="form-check-input chk" id="iq_3"><label class="form-check-label w-100" for="iq_3">Elétrica e Redes: Disjuntor individual de 10A e cabo de rede (Ethernet) ligado</label></div>
-              <div class="check-item form-check"><input type="checkbox" class="form-check-input chk" id="iq_4"><label class="form-check-label w-100" for="iq_4">Organização: Cabos e mangueiras presos com abraçadeiras organizadoras</label></div>
-
-              <!-- Fase 2 - OQ -->
-              <div class="section-header d-flex align-items-center gap-2">
-                <i class="bi bi-gear-fill"></i>
-                <span>Fase 2 - Teste de Funcionamento (OQ)</span>
-              </div>
-              <div class="check-item form-check"><input type="checkbox" class="form-check-input chk" id="oq_1"><label class="form-check-label w-100" for="oq_1">Impressão: Código gravado corretamente no local certo após a parada da máquina</label></div>
-              <div class="check-item form-check"><input type="checkbox" class="form-check-input chk" id="oq_2"><label class="form-check-label w-100" for="oq_2">Segurança de Teste: Equipamento testado por 3 minutos com esteira parada</label></div>
-              <div class="check-item form-check"><input type="checkbox" class="form-check-input chk" id="oq_3"><label class="form-check-label w-100" for="oq_3">Idioma: Menus e mensagens do painel em Português (Brasil)</label></div>
-
-              <!-- Fase 3 - PQ -->
-              <div class="section-header d-flex align-items-center gap-2">
-                <i class="bi bi-graph-up-arrow"></i>
-                <span>Fase 3 - Validação de Produção e Segurança (PQ)</span>
-              </div>
-              <div class="check-item form-check"><input type="checkbox" class="form-check-input chk" id="pq_1"><label class="form-check-label w-100" for="pq_1">Estabilidade: Datador rodando contínuo em produção por 72 horas</label></div>
-              <div class="check-item form-check"><input type="checkbox" class="form-check-input chk" id="pq_2"><label class="form-check-label w-100" for="pq_2">Qualidade: Aprovação do setor de Qualidade e Segurança Industrial</label></div>
-              <div class="check-item form-check"><input type="checkbox" class="form-check-input chk" id="pq_3"><label class="form-check-label w-100" for="pq_3">Conformidade: Adesivos de alerta de Laser colados conforme norma NR-12</label></div>
-
-              <div class="row g-2 mt-4">
-                <div class="col-4">
-                  <button type="reset" class="btn btn-outline-secondary w-100 fw-bold py-2"><i class="bi bi-eraser"></i> Limpar</button>
-                </div>
-                <div class="col-8">
-                  <button type="submit" class="btn btn-primary-custom w-100 fw-bold py-2"><i class="bi bi-disk-fill"></i> Salvar e Gerar PDF</button>
-                </div>
-              </div>
-            </form>
-          </div>
-
-          <!-- ABA 2: CONSULTA POR PERÍODO -->
-          <div class="tab-pane fade" id="pills-consulta">
-            <h1 class="h5 text-center fw-bold text-dark mb-4">CONSULTA DE INSTALAÇÕES POR PERÍODO</h1>
-
-            <div class="bg-light p-3 rounded border mb-4">
-              <div class="row g-2 align-items-end">
-                <div class="col-md-4">
-                  <label class="form-label fw-bold small text-secondary">Data Inicial</label>
-                  <input type="date" id="filtroInicio" class="form-control">
-                </div>
-                <div class="col-md-4">
-                  <label class="form-label fw-bold small text-secondary">Data Final</label>
-                  <input type="date" id="filtroFim" class="form-control">
-                </div>
-                <div class="col-md-4">
-                  <button type="button" class="btn btn-primary-custom w-100 fw-bold" onclick="filtrarPorPeriodo()"><i class="bi bi-funnel-fill"></i> Filtrar Registros</button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Tabela de Resultados -->
-            <div class="table-responsive">
-              <table class="table table-hover align-middle border">
-                <thead class="table-light">
-                  <tr>
-                    <th>Período</th>
-                    <th>Unidade / Linha</th>
-                    <th>Datador (Série)</th>
-                    <th>Ações</th>
-                  </tr>
-                </thead>
-                <tbody id="tabelaResultados">
-                  <!-- Inserido dinamicamente via JS -->
-                </tbody>
-              </table>
-            </div>
-            
-          </div>
-
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
-  <script>
-    function formatarData(dataISO) {
-      if (!dataISO) return '';
-      const [ano, mes, dia] = dataISO.split('-');
-      return `${dia}/${mes}/${ano}`;
-    }
-
-    // Salva o registro atual no banco local e gera o PDF individual
-    function salvarEGerarPDF(e) {
-      e.preventDefault();
-
-      const registro = {
-        id: Date.now(),
-        dataInicio: document.getElementById('dataInicio').value,
-        dataFim: document.getElementById('dataFim').value,
-        unidade: document.getElementById('unidade').value,
-        linha: document.getElementById('linha').value,
-        numSerie: document.getElementById('numSerie').value,
-        maquina: document.getElementById('maquina').value,
-        tecnico: document.getElementById('tecnico').value,
-        itens: []
-      };
-
-      document.querySelectorAll('.check-item').forEach(item => {
-        const desc = item.querySelector('label').innerText;
-        const checked = item.querySelector('input').checked;
-        registro.itens.push({ descricao: desc, status: checked ? 'CONCLUÍDO (OK)' : 'PENDENTE' });
-      });
-
-      // Salva no historico local
-      const historico = JSON.parse(localStorage.getItem('bd_checklists_mdias')) || [];
-      historico.push(registro);
-      localStorage.setItem('bd_checklists_mdias', JSON.stringify(historico));
-
-      alert("Instalação registrada com sucesso no banco de dados!");
-      gerarPDFRegistro(registro);
-    }
-
-    // Gera PDF de um registro específico
-    function gerarPDFRegistro(reg) {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-
-      // Topo Azul
-      doc.setFillColor(0, 75, 147);
-      doc.rect(0, 0, 210, 20, 'F');
-      
-      doc.setTextColor(255, 255, 255);
-      doc.setFontSize(14);
-      doc.setFont("helvetica", "bold");
-      doc.text("PROJETOS M. DIAS", 105, 13, { align: "center" });
-
-      // Cabeçalho
-      doc.setTextColor(0, 75, 147);
-      doc.setFontSize(12);
-      doc.text("RELATÓRIO TÉCNICO DE INSTALAÇÃO - DATADORES LASER", 10, 30);
-
-      doc.setTextColor(50, 50, 50);
-      doc.setFontSize(9);
-      doc.setFont("helvetica", "normal");
-      doc.text(`Período da Instalação: ${formatarData(reg.dataInicio)} até ${formatarData(reg.dataFim)}`, 10, 38);
-      doc.text(`Unidade: ${reg.unidade}  |  Linha: ${reg.linha}  |  Equipamento: ${reg.maquina}`, 10, 44);
-      doc.text(`Nº Série Datador: ${reg.numSerie}  |  Técnico Responsável: ${reg.tecnico}`, 10, 50);
-
-      const rows = reg.itens.map(i => [i.descricao, i.status]);
-
-      doc.autoTable({
-        startY: 56,
-        head: [['Item de Verificação Técnica', 'Situação']],
-        body: rows,
-        theme: 'striped',
-        headStyles: { fillColor: [0, 75, 147] },
-        columnStyles: { 0: { cellWidth: 145 }, 1: { cellWidth: 35, fontStyle: 'bold' } }
-      });
-
-      doc.save(`PROJETOS_MDIAS_${reg.unidade.split(' ')[0]}_Série_${reg.numSerie}.pdf`);
-    }
-
-    // Carrega a tabela na aba de consulta
-    function carregarHistoricoTabela(listaFiltrada = null) {
-      const historico = listaFiltrada || JSON.parse(localStorage.getItem('bd_checklists_mdias')) || [];
-      const tbody = document.getElementById('tabelaResultados');
-      tbody.innerHTML = '';
-
-      if (historico.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="4" class="text-center text-muted py-3">Nenhum registro encontrado no período.</td></tr>`;
-        return;
-      }
-
-      historico.forEach(reg => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td class="small">${formatarData(reg.dataInicio)} a ${formatarData(reg.dataFim)}</td>
-          <td class="small"><strong>${reg.unidade}</strong><br>${reg.linha}</td>
-          <td class="small">${reg.numSerie}</td>
-          <td>
-            <button class="btn btn-sm btn-outline-primary" onclick='regerarPDF(${reg.id})'><i class="bi bi-file-pdf"></i> Baixar PDF</button>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    // Filtra lista por intervalo de datas
-    function filtrarPorPeriodo() {
-      const inicio = document.getElementById('filtroInicio').value;
-      const fim = document.getElementById('filtroFim').value;
-
-      if (!inicio || !fim) {
-        alert("Por favor, selecione as datas Inicial e Final para filtrar.");
-        return;
-      }
-
-      const historico = JSON.parse(localStorage.getItem('bd_checklists_mdias')) || [];
-      const filtrados = historico.filter(item => item.dataInicio >= inicio && item.dataFim <= fim);
-      
-      carregarHistoricoTabela(filtrados);
-    }
-
-    function regerarPDF(id) {
-      const historico = JSON.parse(localStorage.getItem('bd_checklists_mdias')) || [];
-      const registro = historico.find(r => r.id === id);
-      if (registro) gerarPDFRegistro(registro);
     }
   </script>
 </body>
