@@ -132,27 +132,50 @@
         </div>
       </div>
 
-      <!-- MÓDULO 2: GERAR RELATÓRIOS (NOVO) -->
+      <!-- MÓDULO 2: GERAR RELATÓRIOS (COM SELEÇÃO DE PERÍODO) -->
       <div id="mod-relatorios" class="hidden space-y-6">
-        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
-          <h3 class="text-lg font-bold text-slate-800 border-b pb-2">Central de Exportação de Relatórios</h3>
-          <p class="text-sm text-slate-500">Gere relatórios completos com base nos dados registrados para a unidade selecionada.</p>
-          
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-            <div class="p-4 border border-slate-200 rounded-lg flex justify-between items-center bg-slate-50">
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-6">
+          <div class="border-b pb-3">
+            <h3 class="text-lg font-bold text-slate-800">Gerar Relatórios por Período</h3>
+            <p class="text-xs text-slate-500">Selecione o intervalo de datas e o filtro desejado para exportar os registros da unidade ativa.</p>
+          </div>
+
+          <!-- Filtros de Período -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200">
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Data Inicial</label>
+              <input type="date" id="relatorio-data-inicio" class="w-full border border-slate-300 rounded-lg p-2 text-sm bg-white">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Data Final</label>
+              <input type="date" id="relatorio-data-fim" class="w-full border border-slate-300 rounded-lg p-2 text-sm bg-white">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Filtro de Status</label>
+              <select id="relatorio-status" class="w-full border border-slate-300 rounded-lg p-2 text-sm bg-white">
+                <option value="TODOS">Todos os Status</option>
+                <option value="Concluído">Somente Concluídos</option>
+                <option value="Pendente">Somente Pendentes</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Opções de Exportação -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="p-5 border border-slate-200 rounded-xl flex justify-between items-center bg-white shadow-sm">
               <div>
-                <h4 class="font-bold text-slate-800">Relatório de Equipamentos (Excel)</h4>
-                <p class="text-xs text-slate-500">Planilha estruturada com histórico de instalações.</p>
+                <h4 class="font-bold text-slate-800">Exportar Planilha (Excel)</h4>
+                <p class="text-xs text-slate-500">Relatório detalhado em formato XLS para análise.</p>
               </div>
-              <button onclick="exportarExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition">Baixar Excel</button>
+              <button onclick="exportarExcelComFiltro()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition">Baixar Excel</button>
             </div>
 
-            <div class="p-4 border border-slate-200 rounded-lg flex justify-between items-center bg-slate-50">
+            <div class="p-5 border border-slate-200 rounded-xl flex justify-between items-center bg-white shadow-sm">
               <div>
-                <h4 class="font-bold text-slate-800">Relatório Operacional (PDF)</h4>
-                <p class="text-xs text-slate-500">Documento formatado pronto para impressão/envio.</p>
+                <h4 class="font-bold text-slate-800">Exportar Documento (PDF)</h4>
+                <p class="text-xs text-slate-500">Relatório consolidado e formatado para impressão.</p>
               </div>
-              <button onclick="exportarPDF()" class="bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition">Baixar PDF</button>
+              <button onclick="exportarPDFComFiltro()" class="bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition">Baixar PDF</button>
             </div>
           </div>
         </div>
@@ -341,6 +364,20 @@
       });
     }
 
+    function obterDadosFiltrados() {
+      const dataInicio = document.getElementById("relatorio-data-inicio").value;
+      const dataFim = document.getElementById("relatorio-data-fim").value;
+      const statusFiltro = document.getElementById("relatorio-status").value;
+
+      return dadosEquipamentos.filter(item => {
+        if (item.unidade !== unidadeSelecionada) return false;
+        if (dataInicio && item.data < dataInicio) return false;
+        if (dataFim && item.data > dataFim) return false;
+        if (statusFiltro !== "TODOS" && item.status !== statusFiltro) return false;
+        return true;
+      });
+    }
+
     function calcProgresso() {
       const total = document.querySelectorAll('.chk-box').length;
       const marcados = document.querySelectorAll('.chk-box:checked').length;
@@ -350,28 +387,36 @@
       document.getElementById('texto-progresso').innerText = `${perc}% Concluído`;
     }
 
-    function exportarExcel() {
-      const filtrados = dadosEquipamentos.filter(item => item.unidade === unidadeSelecionada);
-      const ws = XLSX.utils.json_to_sheet(filtrados);
+    function exportarExcelComFiltro() {
+      const dados = obterDadosFiltrados();
+      if (dados.length === 0) {
+        alert("Nenhum registro encontrado para os filtros selecionados.");
+        return;
+      }
+      const ws = XLSX.utils.json_to_sheet(dados);
       const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, "Equipamentos");
-      XLSX.writeFile(wb, `Relatorio_${unidadeSelecionada}.xlsx`);
+      XLSX.utils.book_append_sheet(wb, ws, "Relatório");
+      XLSX.writeFile(wb, `Relatorio_${unidadeSelecionada}_Periodo.xlsx`);
     }
 
-    function exportarPDF() {
+    function exportarPDFComFiltro() {
+      const dados = obterDadosFiltrados();
+      if (dados.length === 0) {
+        alert("Nenhum registro encontrado para os filtros selecionados.");
+        return;
+      }
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
-      const filtrados = dadosEquipamentos.filter(item => item.unidade === unidadeSelecionada);
 
-      doc.text(`Relatório de Instalações - Unidade ${unidadeSelecionada}`, 14, 15);
+      doc.text(`Relatório Operacional — Unidade ${unidadeSelecionada}`, 14, 15);
       
-      const tableData = filtrados.map(i => [i.data, i.linha, i.equipamento, i.serie, i.tecnico, i.status]);
+      const tableData = dados.map(i => [i.data, i.linha, i.equipamento, i.serie, i.tecnico, i.status]);
       doc.autoTable({
         head: [['Data', 'Linha', 'Equipamento', 'Série', 'Técnico', 'Status']],
         body: tableData,
-        startY: 20
+        startY: 22
       });
-      doc.save(`Relatorio_${unidadeSelecionada}.pdf`);
+      doc.save(`Relatorio_${unidadeSelecionada}_Periodo.pdf`);
     }
   </script>
 </body>
