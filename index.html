@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Check-list DIKAI - M. Dias Branco</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+  
+  <style>
+    :root { --primary-color: #004b93; --primary-hover: #00366b; --bg-color: #f4f6f9; }
+    body { background-color: var(--bg-color); font-family: system-ui, -apple-system, sans-serif; }
+    .main-card { max-width: 800px; margin: 0 auto; border: none; border-top: 5px solid var(--primary-color); }
+    .header-title { color: var(--primary-color); letter-spacing: 1px; }
+    .section-header { background-color: #eef4fa; color: var(--primary-color); font-size: 0.95rem; font-weight: 700; padding: 10px 15px; border-radius: 6px; margin-top: 25px; margin-bottom: 15px; }
+    .check-item { padding: 8px 12px; border-bottom: 1px solid #f0f0f0; border-radius: 6px; }
+    .check-item:hover { background-color: #f8f9fa; }
+    .btn-primary-custom { background-color: var(--primary-color); border-color: var(--primary-color); color: #fff; }
+    .btn-primary-custom:hover { background-color: var(--primary-hover); color: #fff; }
+    .nav-pills .nav-link.active { background-color: var(--primary-color); }
+    .nav-pills .nav-link { color: var(--primary-color); }
+  </style>
+</head>
+<body class="py-4 px-2">
+
+  <div class="container">
+    <div class="card shadow-sm main-card">
+      <div class="card-body p-4">
+        
+        <!-- Cabeçalho Principal -->
+        <div class="text-center pb-3 mb-3 border-bottom">
+          <h2 class="fw-bold header-title m-0">PROJETOS M. DIAS</h2>
+          <span class="badge bg-secondary mt-2">Validação Técnica e Controle de Instalações</span>
+        </div>
+
+        <!-- Abas de Navegação -->
+        <ul class="nav nav-pills nav-justified mb-4" id="pills-tab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active fw-bold" id="tab-form" data-bs-toggle="pill" data-bs-target="#pills-form" type="button"><i class="bi bi-file-earmark-plus"></i> Novo Check-list</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link fw-bold" id="tab-consulta" data-bs-toggle="pill" data-bs-target="#pills-consulta" type="button" onclick="carregarHistoricoTabela()"><i class="bi bi-search"></i> Consultar por Período</button>
+          </li>
+        </ul>
+
+        <div class="tab-content" id="pills-tabContent">
+          
+          <!-- ABA 1: FORMULÁRIO -->
+          <div class="tab-pane fade show active" id="pills-form">
+            <h1 class="h5 text-center fw-bold text-dark mb-4">CHECK-LIST DE INSTALAÇÃO - DATADORES LASER (v7)</h1>
+
+            <form id="checklistForm" onsubmit="salvarEGerarPDF(event)">
+              <div class="section-header d-flex align-items-center gap-2">
+                <i class="bi bi-calendar-range-fill"></i>
+                <span>1. Identificação e Período da Instalação</span>
+              </div>
+
+              <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                  <label class="form-label fw-bold text-secondary small">Data Inicial da Instalação</label>
+                  <input type="date" id="dataInicio" class="form-control" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-bold text-secondary small">Data Final da Instalação</label>
+                  <input type="date" id="dataFim" class="form-control" required>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label fw-bold text-secondary small">Unidade Industrial</label>
+                <select id="unidade" class="form-select" required>
+                  <option value="" disabled selected>Selecione a unidade...</option>
+                  <option value="Jaboatão - PE (JGU)">Jaboatão - PE (JGU)</option>
+                  <option value="Bahia (GMA)">Bahia (GMA)</option>
+                  <option value="Fortaleza">Fortaleza</option>
+                </select>
+              </div>
+
+              <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                  <label class="form-label fw-bold text-secondary small">Linha de Produção</label>
+                  <input type="text" id="linha" class="form-control" placeholder="Ex: Linha 02" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-bold text-secondary small">Nº de Série do Datador</label>
+                  <input type="text" id="numSerie" class="form-control" placeholder="Ex: DKA-2026-X" required>
+                </div>
+              </div>
+
+              <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                  <label class="form-label fw-bold text-secondary small">Máquina</label>
+                  <select id="maquina" class="form-select" required>
+                    <option value="Flowpack">Flowpack</option>
+                    <option value="Portfolio">Portfolio</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-bold text-secondary small">Técnico Responsável</label>
+                  <input type="text" id="tecnico" class="form-control" placeholder="Seu nome" required>
+                </div>
+              </div>
+
+              <!-- Fase 0 -->
+              <div class="section-header d-flex align-items-center gap-2">
+                <i class="bi bi-box-seam-fill"></i>
+                <span>Fase 0 - Conferência de Materiais e Peças</span>
+              </div>
+              <div class="check-item form-check"><input type="checkbox" class="form-check-input chk" id="f0_1"><label class="form-check-label w-100" for="f0_1">Chapa de Fixação dos Rolos (2 un.) - Suporte metálico</label></div>
+              <div class="check-item form-check"><input type="checkbox" class="form-check-input chk" id="f0_2"><label class="form-check-label w-100" for="f0_2">Pad de Estabilização (1 un.) - Placa de alinhamento da embalagem</label></div>
+              <div class="check-item form-check"><input type="checkbox" class="form-check-input chk" id="f0_3"><label class="form-check-label w-100" for="f0_3">Conjunto de Fixação do Cabeçote (1 un.) - Suporte principal do laser</label></div>
+              <div class="check-item form-check"><input type="checkbox" class="form-check-input chk" id="f0_4"><label class="form-check-label w-100" for="f0_4">Rolo de Borracha (1 un.) - Rolo de tráfego do filme</label></div>
+              <div class="check-item form-check"><input type="checkbox" class="form-check-input chk" id="f0_5"><label class="form-check-label w-100" for="f0_5">Rolos Fixos (4 un.) e Rolos Livres (4 un.) - Guias do filme</label></div>
+
+              <!-- Fase 1 - IQ -->
+              <div class="section-header d-flex align-items-center gap-2">
+                <i class="bi bi-tools"></i>
+                <span>Fase 1 - Inspeção Técnica da Instalação (IQ)</span>
+              </div>
+              <div class="check-item form-check"><input type="checkbox" class="form-check-input chk" id="iq_1"><label class="form-check-label w-100" for="iq_1">Estrutura: Furações originais mantidas sem danificar o equipamento</label></div>
+              <div class="check-item form-check"><input type="checkbox" class="form-check-input chk" id="iq_2"><label class="form-check-label w-100" for="iq_2">Posicionamento: Laser montado voltado para baixo com calços de 15 mm</label></div>
+              <div class="check-item form-check"><input type="checkbox" class="form-check-input chk" id="iq_3"><label class="form-check-label w-100" for="iq_3">Elétrica e Redes: Disjuntor individual de 10A e cabo de rede (Ethernet) ligado</label></div>
+              <div class="check-item form-check"><input type="checkbox" class="form-check-input chk" id="iq_4"><label class="form-check-label w-100" for="iq_4">Organização: Cabos e mangueiras presos com abraçadeiras organizadoras</label></div>
+
+              <!-- Fase 2 - OQ -->
+              <div class="section-header d-flex align-items-center gap-2">
+                <i class="bi bi-gear-fill"></i>
+                <span>Fase 2 - Teste de Funcionamento (OQ)</span>
+              </div>
+              <div class="check-item form-check"><input type="checkbox" class="form-check-input chk" id="oq_1"><label class="form-check-label w-100" for="oq_1">Impressão: Código gravado corretamente no local certo após a parada da máquina</label></div>
+              <div class="check-item form-check"><input type="checkbox" class="form-check-input chk" id="oq_2"><label class="form-check-label w-100" for="oq_2">Segurança de Teste: Equipamento testado por 3 minutos com esteira parada</label></div>
+              <div class="check-item form-check"><input type="checkbox" class="form-check-input chk" id="oq_3"><label class="form-check-label w-100" for="oq_3">Idioma: Menus e mensagens do painel em Português (Brasil)</label></div>
+
+              <!-- Fase 3 - PQ -->
+              <div class="section-header d-flex align-items-center gap-2">
+                <i class="bi bi-graph-up-arrow"></i>
+                <span>Fase 3 - Validação de Produção e Segurança (PQ)</span>
+              </div>
+              <div class="check-item form-check"><input type="checkbox" class="form-check-input chk" id="pq_1"><label class="form-check-label w-100" for="pq_1">Estabilidade: Datador rodando contínuo em produção por 72 horas</label></div>
+              <div class="check-item form-check"><input type="checkbox" class="form-check-input chk" id="pq_2"><label class="form-check-label w-100" for="pq_2">Qualidade: Aprovação do setor de Qualidade e Segurança Industrial</label></div>
+              <div class="check-item form-check"><input type="checkbox" class="form-check-input chk" id="pq_3"><label class="form-check-label w-100" for="pq_3">Conformidade: Adesivos de alerta de Laser colados conforme norma NR-12</label></div>
+
+              <div class="row g-2 mt-4">
+                <div class="col-4">
+                  <button type="reset" class="btn btn-outline-secondary w-100 fw-bold py-2"><i class="bi bi-eraser"></i> Limpar</button>
+                </div>
+                <div class="col-8">
+                  <button type="submit" class="btn btn-primary-custom w-100 fw-bold py-2"><i class="bi bi-disk-fill"></i> Salvar e Gerar PDF</button>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <!-- ABA 2: CONSULTA POR PERÍODO -->
+          <div class="tab-pane fade" id="pills-consulta">
+            <h1 class="h5 text-center fw-bold text-dark mb-4">CONSULTA DE INSTALAÇÕES POR PERÍODO</h1>
+
+            <div class="bg-light p-3 rounded border mb-4">
+              <div class="row g-2 align-items-end">
+                <div class="col-md-4">
+                  <label class="form-label fw-bold small text-secondary">Data Inicial</label>
+                  <input type="date" id="filtroInicio" class="form-control">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label fw-bold small text-secondary">Data Final</label>
+                  <input type="date" id="filtroFim" class="form-control">
+                </div>
+                <div class="col-md-4">
+                  <button type="button" class="btn btn-primary-custom w-100 fw-bold" onclick="filtrarPorPeriodo()"><i class="bi bi-funnel-fill"></i> Filtrar Registros</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tabela de Resultados -->
+            <div class="table-responsive">
+              <table class="table table-hover align-middle border">
+                <thead class="table-light">
+                  <tr>
+                    <th>Período</th>
+                    <th>Unidade / Linha</th>
+                    <th>Datador (Série)</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="tabelaResultados">
+                  <!-- Inserido dinamicamente via JS -->
+                </tbody>
+              </table>
+            </div>
+            
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    function formatarData(dataISO) {
+      if (!dataISO) return '';
+      const [ano, mes, dia] = dataISO.split('-');
+      return `${dia}/${mes}/${ano}`;
+    }
+
+    // Salva o registro atual no banco local e gera o PDF individual
+    function salvarEGerarPDF(e) {
+      e.preventDefault();
+
+      const registro = {
+        id: Date.now(),
+        dataInicio: document.getElementById('dataInicio').value,
+        dataFim: document.getElementById('dataFim').value,
+        unidade: document.getElementById('unidade').value,
+        linha: document.getElementById('linha').value,
+        numSerie: document.getElementById('numSerie').value,
+        maquina: document.getElementById('maquina').value,
+        tecnico: document.getElementById('tecnico').value,
+        itens: []
+      };
+
+      document.querySelectorAll('.check-item').forEach(item => {
+        const desc = item.querySelector('label').innerText;
+        const checked = item.querySelector('input').checked;
+        registro.itens.push({ descricao: desc, status: checked ? 'CONCLUÍDO (OK)' : 'PENDENTE' });
+      });
+
+      // Salva no historico local
+      const historico = JSON.parse(localStorage.getItem('bd_checklists_mdias')) || [];
+      historico.push(registro);
+      localStorage.setItem('bd_checklists_mdias', JSON.stringify(historico));
+
+      alert("Instalação registrada com sucesso no banco de dados!");
+      gerarPDFRegistro(registro);
+    }
+
+    // Gera PDF de um registro específico
+    function gerarPDFRegistro(reg) {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      // Topo Azul
+      doc.setFillColor(0, 75, 147);
+      doc.rect(0, 0, 210, 20, 'F');
+      
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "bold");
+      doc.text("PROJETOS M. DIAS", 105, 13, { align: "center" });
+
+      // Cabeçalho
+      doc.setTextColor(0, 75, 147);
+      doc.setFontSize(12);
+      doc.text("RELATÓRIO TÉCNICO DE INSTALAÇÃO - DATADORES LASER", 10, 30);
+
+      doc.setTextColor(50, 50, 50);
+      doc.setFontSize(9);
+      doc.setFont("helvetica", "normal");
+      doc.text(`Período da Instalação: ${formatarData(reg.dataInicio)} até ${formatarData(reg.dataFim)}`, 10, 38);
+      doc.text(`Unidade: ${reg.unidade}  |  Linha: ${reg.linha}  |  Equipamento: ${reg.maquina}`, 10, 44);
+      doc.text(`Nº Série Datador: ${reg.numSerie}  |  Técnico Responsável: ${reg.tecnico}`, 10, 50);
+
+      const rows = reg.itens.map(i => [i.descricao, i.status]);
+
+      doc.autoTable({
+        startY: 56,
+        head: [['Item de Verificação Técnica', 'Situação']],
+        body: rows,
+        theme: 'striped',
+        headStyles: { fillColor: [0, 75, 147] },
+        columnStyles: { 0: { cellWidth: 145 }, 1: { cellWidth: 35, fontStyle: 'bold' } }
+      });
+
+      doc.save(`PROJETOS_MDIAS_${reg.unidade.split(' ')[0]}_Série_${reg.numSerie}.pdf`);
+    }
+
+    // Carrega a tabela na aba de consulta
+    function carregarHistoricoTabela(listaFiltrada = null) {
+      const historico = listaFiltrada || JSON.parse(localStorage.getItem('bd_checklists_mdias')) || [];
+      const tbody = document.getElementById('tabelaResultados');
+      tbody.innerHTML = '';
+
+      if (historico.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" class="text-center text-muted py-3">Nenhum registro encontrado no período.</td></tr>`;
+        return;
+      }
+
+      historico.forEach(reg => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="small">${formatarData(reg.dataInicio)} a ${formatarData(reg.dataFim)}</td>
+          <td class="small"><strong>${reg.unidade}</strong><br>${reg.linha}</td>
+          <td class="small">${reg.numSerie}</td>
+          <td>
+            <button class="btn btn-sm btn-outline-primary" onclick='regerarPDF(${reg.id})'><i class="bi bi-file-pdf"></i> Baixar PDF</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Filtra lista por intervalo de datas
+    function filtrarPorPeriodo() {
+      const inicio = document.getElementById('filtroInicio').value;
+      const fim = document.getElementById('filtroFim').value;
+
+      if (!inicio || !fim) {
+        alert("Por favor, selecione as datas Inicial e Final para filtrar.");
+        return;
+      }
+
+      const historico = JSON.parse(localStorage.getItem('bd_checklists_mdias')) || [];
+      const filtrados = historico.filter(item => item.dataInicio >= inicio && item.dataFim <= fim);
+      
+      carregarHistoricoTabela(filtrados);
+    }
+
+    function regerarPDF(id) {
+      const historico = JSON.parse(localStorage.getItem('bd_checklists_mdias')) || [];
+      const registro = historico.find(r => r.id === id);
+      if (registro) gerarPDFRegistro(registro);
+    }
+  </script>
+</body>
+</html>
