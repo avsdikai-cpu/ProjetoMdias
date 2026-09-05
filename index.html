@@ -16,8 +16,8 @@
     <!-- Cabeçalho Principal -->
     <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4">
       <div>
-        <h1 class="text-2xl font-bold text-slate-900">M. Dias Branco — Gestão & Check-list DIKAI</h1>
-        <p class="text-sm text-slate-500">Sistema integrado de relatórios, monitoramento e qualificação (v7)</p>
+        <h1 class="text-2xl font-bold text-slate-900">M. Dias Branco — Painel de Datadores</h1>
+        <p class="text-sm text-slate-500">Gestão de instalações, relatórios e manutenção de datadores laser DLU 580</p>
       </div>
       <!-- Navegação por Abas -->
       <div class="flex bg-slate-100 p-1 rounded-lg border border-slate-200">
@@ -29,39 +29,62 @@
 
     <!-- ABA 1: DASHBOARD DE MONITORAMENTO -->
     <div id="aba-dash" class="space-y-6">
+      <!-- KPIs -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-          <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Registrado</span>
-          <p id="dash-total" class="text-3xl font-bold text-slate-800 mt-1">0</p>
+          <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Mapeado</span>
+          <p id="kpi-total" class="text-3xl font-bold text-slate-800 mt-1">0</p>
         </div>
         <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-          <span class="text-xs font-semibold text-emerald-500 uppercase tracking-wider">Concluídos</span>
-          <p id="dash-concluido" class="text-3xl font-bold text-emerald-600 mt-1">0</p>
+          <span class="text-xs font-semibold text-emerald-500 uppercase tracking-wider">Instalações Concluídas</span>
+          <p id="kpi-concluido" class="text-3xl font-bold text-emerald-600 mt-1">0</p>
         </div>
         <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
           <span class="text-xs font-semibold text-amber-500 uppercase tracking-wider">Pendentes</span>
-          <p id="dash-pendente" class="text-3xl font-bold text-amber-600 mt-1">0</p>
+          <p id="kpi-pendente" class="text-3xl font-bold text-amber-600 mt-1">0</p>
         </div>
         <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-          <span class="text-xs font-semibold text-blue-500 uppercase tracking-wider">Taxa de Conclusão</span>
-          <p id="dash-taxa" class="text-3xl font-bold text-blue-600 mt-1">0%</p>
+          <span class="text-xs font-semibold text-blue-500 uppercase tracking-wider">Jaboatão (JGU)</span>
+          <p id="kpi-jaboatao" class="text-3xl font-bold text-blue-600 mt-1">0</p>
         </div>
       </div>
 
-      <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
-        <h3 class="font-bold text-slate-800 mb-3">Últimas Atividades Registradas</h3>
+      <!-- Filtros Rápidos e Tabela -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="p-4 border-b border-slate-200 flex flex-wrap gap-3 items-center justify-between">
+          <span class="font-semibold text-slate-700">Histórico do Parque Tecnológico</span>
+          <div class="flex gap-2">
+            <select id="filtro-unidade" onchange="renderizarTabelaDash()" class="border border-slate-300 text-sm rounded-lg p-2 bg-slate-50">
+              <option value="todos">Todas as Unidades</option>
+              <option value="JGU">JGU - Jaboatão (PE)</option>
+              <option value="GMA">GMA - Salvador (BA)</option>
+              <option value="FOR">FOR - Fortaleza (CE)</option>
+            </select>
+            <select id="filtro-status" onchange="renderizarTabelaDash()" class="border border-slate-300 text-sm rounded-lg p-2 bg-slate-50">
+              <option value="todos">Todos os Status</option>
+              <option value="Concluído">Concluído</option>
+              <option value="Pendente">Pendente</option>
+            </select>
+          </div>
+        </div>
+
         <div class="overflow-x-auto">
           <table class="w-full text-left text-sm text-slate-600">
             <thead class="bg-slate-50 text-slate-700 uppercase text-xs font-semibold border-b border-slate-200">
               <tr>
-                <th class="p-3">Data</th>
-                <th class="p-3">Unidade</th>
-                <th class="p-3">Linha</th>
-                <th class="p-3">Equipamento</th>
-                <th class="p-3">Status</th>
+                <th class="p-4">Data</th>
+                <th class="p-4">Unidade</th>
+                <th class="p-4">Linha</th>
+                <th class="p-4">Equipamento</th>
+                <th class="p-4">Nº de Série</th>
+                <th class="p-4">Técnico</th>
+                <th class="p-4">Status</th>
+                <th class="p-4">Observações</th>
               </tr>
             </thead>
-            <tbody id="tabela-dash" class="divide-y divide-slate-100"></tbody>
+            <tbody id="tabela-dados" class="divide-y divide-slate-100">
+              <!-- Linhas inseridas via JS -->
+            </tbody>
           </table>
         </div>
       </div>
@@ -106,11 +129,11 @@
         <div class="flex flex-wrap gap-2 justify-end pt-2">
           <button onclick="filtrarRelatorio()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition">Aplicar Filtros</button>
           <button onclick="exportarExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition">Exportar Excel</button>
-          <button onclick="exportarPDF()" class="bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition">Exportar PDF</button>
+          <button onclick="exportarPDF()" class="bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition">Gerar Relatório PDF</button>
         </div>
       </div>
 
-      <!-- Result Table -->
+      <!-- Tabela de Resultado do Relatório -->
       <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
         <div class="p-4 border-b border-slate-200 flex justify-between items-center">
           <span class="font-bold text-slate-800">Resultado da Consulta</span>
@@ -138,11 +161,10 @@
 
     <!-- ABA 3: CHECK-LIST DIGITAL (PDF DIKAI v7) -->
     <div id="aba-checklist" class="hidden space-y-6">
-      
       <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col md:flex-row justify-between items-center gap-4">
         <div>
           <h2 class="text-lg font-bold text-slate-800">Check-list de Instalação - Datadores Laser DIKAI (v7)</h2>
-          <p class="text-xs text-slate-500">Estrutura IQ / OQ / PQ com subfases conforme documento oficial M. Dias Branco</p>
+          <p class="text-xs text-slate-500">Estrutura IQ / OQ / PQ com subfases conforme protocolo oficial M. Dias Branco</p>
         </div>
         <div class="flex items-center gap-4 w-full md:w-auto">
           <div class="w-full md:w-48 bg-slate-200 rounded-full h-3 overflow-hidden">
@@ -257,18 +279,34 @@
   </div>
 
   <script>
-    // Base de dados central ajustada para as novas siglas e unidades
-    const baseAtividades = [
-      { id: 1, data: "2026-07-10", unidade: "JGU", linha: "Linha 02", equipamento: "Flowpack 01", serie: "DLUT58260320", tecnico: "Charles / Andre", status: "Concluído", obs: "Instalação OK" },
-      { id: 2, data: "2026-07-15", unidade: "JGU", linha: "Linha 02", equipamento: "Flowpack 02", serie: "DLUT58260294", tecnico: "Charles / Andre", status: "Concluído", obs: "Instalação OK" },
-      { id: 3, data: "2026-07-20", unidade: "GMA", linha: "Linha 01", equipamento: "Portfolio 03", serie: "DLUT58260279", tecnico: "Andre Gustavo", status: "Concluído", obs: "Ajuste suporte" },
-      { id: 4, data: "2026-07-25", unidade: "GMA", linha: "Linha 01", equipamento: "Portfolio 04", serie: "DLUT58260307", tecnico: "Andre Gustavo", status: "Pendente", obs: "Aguardando freio" },
-      { id: 5, data: "2026-08-01", unidade: "JGU", linha: "Linha 05", equipamento: "Flowpack 01", serie: "DLUT58260278", tecnico: "Charles", status: "Concluído", obs: "Suporte ok" },
-      { id: 6, data: "2026-08-10", unidade: "JGU", linha: "Linha 10", equipamento: "Portfolio 01", serie: "DLUT58260189", tecnico: "Andre Santana", status: "Pendente", obs: "Aguardando parada" },
-      { id: 7, data: "2026-08-20", unidade: "JGU", linha: "Linha 03", equipamento: "Cracker Flowpack", serie: "DLUT58260246", tecnico: "Andre Santana", status: "Concluído", obs: "Ajustado foco" }
+    // Base de Dados Completa Sincronizada (Jaboatão -> JGU | Bahia -> GMA)
+    const dadosEquipamentos = [
+      { id: 1, data: "2026-07-10", unidade: "JGU", linha: "Linha 02", equipamento: "Flow Pack 01", serie: "DLUT58260320", tecnico: "Charles / Andre", status: "Concluído", obs: "Instalação finalizada" },
+      { id: 2, data: "2026-07-12", unidade: "JGU", linha: "Linha 02", equipamento: "Flow Pack 02", serie: "DLUT58260294", tecnico: "Charles / Andre", status: "Concluído", obs: "Instalação finalizada" },
+      { id: 3, data: "2026-07-15", unidade: "JGU", linha: "Linha 02", equipamento: "Flow Pack 03", serie: "DLUT58260315", tecnico: "Charles / Andre", status: "Concluído", obs: "Instalação finalizada" },
+      { id: 4, data: "2026-07-18", unidade: "JGU", linha: "Linha 02", equipamento: "Flow Pack 04", serie: "DLUT58260303", tecnico: "Charles / Andre", status: "Concluído", obs: "Instalação finalizada" },
+      { id: 5, data: "2026-07-20", unidade: "GMA", linha: "Linha 02", equipamento: "Porte Folio 3", serie: "DLUT58260279", tecnico: "Andre Gustavo", status: "Concluído", obs: "Reposicionar Suporte" },
+      { id: 6, data: "2026-07-22", unidade: "GMA", linha: "Linha 02", equipamento: "Porte Folio 4", serie: "DLUT58260307", tecnico: "Andre Gustavo", status: "Concluído", obs: "Organização dos cabos" },
+      { id: 7, data: "2026-07-24", unidade: "GMA", linha: "Linha 02", equipamento: "Porte Folio 5", serie: "N/A", tecnico: "Andre Gustavo", status: "Concluído", obs: "Organização dos cabos" },
+      { id: 8, data: "2026-07-25", unidade: "GMA", linha: "Linha 02", equipamento: "Porte Folio 6", serie: "DLUT58260260", tecnico: "Andre Gustavo", status: "Concluído", obs: "Organização dos cabos" },
+      { id: 9, data: "2026-07-28", unidade: "GMA", linha: "Linha 02", equipamento: "Porte Folio 2", serie: "N/A", tecnico: "Charles", status: "Pendente", obs: "Aguardando parada de linha" },
+      { id: 10, data: "2026-07-29", unidade: "GMA", linha: "Linha 02", equipamento: "Porte Folio 1", serie: "N/A", tecnico: "Charles", status: "Pendente", obs: "Aguardando parada de linha" },
+      { id: 11, data: "2026-08-01", unidade: "GMA", linha: "Linha 05", equipamento: "Flow Pack 01", serie: "DLUT58260278", tecnico: "Charles", status: "Concluído", obs: "Reposicionar Suporte" },
+      { id: 12, data: "2026-08-03", unidade: "GMA", linha: "Linha 05", equipamento: "Flow Pack 02", serie: "DLUT58260255", tecnico: "Charles", status: "Concluído", obs: "Reposicionar Suporte" },
+      { id: 13, data: "2026-08-05", unidade: "GMA", linha: "Linha 05", equipamento: "Flow Pack 03", serie: "DLUT58260254", tecnico: "Charles", status: "Concluído", obs: "Reposicionar Suporte" },
+      { id: 14, data: "2026-08-10", unidade: "JGU", linha: "Linha 10", equipamento: "Porti Folio 01", serie: "DLUT58260189", tecnico: "Andre Santana", status: "Concluído", obs: "Instalação finalizada" },
+      { id: 15, data: "2026-08-12", unidade: "JGU", linha: "Linha 10", equipamento: "Porti Folio 02", serie: "DLUT58260214", tecnico: "Andre Santana", status: "Concluído", obs: "Instalação finalizada" },
+      { id: 16, data: "2026-08-15", unidade: "JGU", linha: "Linha 10", equipamento: "Porti Folio 03", serie: "N/A", tecnico: "Andre Santana", status: "Pendente", obs: "Aguardando parada de linha" },
+      { id: 17, data: "2026-08-18", unidade: "JGU", linha: "Linha 10", equipamento: "Porti Folio 04", serie: "N/A", tecnico: "Andre Santana", status: "Pendente", obs: "Aguardando parada de linha" },
+      { id: 18, data: "2026-08-20", unidade: "JGU", linha: "Linha 10", equipamento: "Porti Folio 05", serie: "N/A", tecnico: "Andre Santana", status: "Pendente", obs: "Aguardando parada de linha" },
+      { id: 19, data: "2026-08-22", unidade: "JGU", linha: "Linha 10", equipamento: "Porti Folio 06", serie: "N/A", tecnico: "Andre Santana", status: "Pendente", obs: "Aguardando parada de linha" },
+      { id: 20, data: "2026-08-25", unidade: "JGU", linha: "Linha 03", equipamento: "Cracker Flowpack 01", serie: "DLUT58260246", tecnico: "Andre Santana", status: "Concluído", obs: "Instalação finalizada" },
+      { id: 21, data: "2026-08-26", unidade: "JGU", linha: "Linha 03", equipamento: "Cracker Flowpack 02", serie: "DLUT58260220", tecnico: "Andre Santana", status: "Concluído", obs: "Instalação finalizada" },
+      { id: 22, data: "2026-08-28", unidade: "JGU", linha: "Linha 03", equipamento: "Cracker Flowpack 03", serie: "DLUT58260246", tecnico: "Andre Santana", status: "Concluído", obs: "Instalação finalizada" },
+      { id: 23, data: "2026-09-01", unidade: "JGU", linha: "Linha 03", equipamento: "Cracker Flowpack 04", serie: "DLUT58260258", tecnico: "Andre Santana", status: "Concluído", obs: "Instalação finalizada" }
     ];
 
-    let registrosFiltrados = [...baseAtividades];
+    let registrosFiltrados = [...dadosEquipamentos];
 
     function mudarAba(aba) {
       ['dash', 'relatorios', 'checklist'].forEach(a => {
@@ -280,31 +318,42 @@
       document.getElementById(`btn-aba-${aba}`).className = "px-4 py-2 text-sm font-medium rounded-md bg-white shadow-sm text-slate-800";
     }
 
-    function carregarDashboard() {
-      const total = baseAtividades.length;
-      const conc = baseAtividades.filter(i => i.status === 'Concluído').length;
-      const pend = baseAtividades.filter(i => i.status === 'Pendente').length;
-      const taxa = total > 0 ? Math.round((conc / total) * 100) : 0;
-
-      document.getElementById('dash-total').innerText = total;
-      document.getElementById('dash-concluido').innerText = conc;
-      document.getElementById('dash-pendente').innerText = pend;
-      document.getElementById('dash-taxa').innerText = `${taxa}%`;
-
-      const tbody = document.getElementById('tabela-dash');
+    function renderizarTabelaDash() {
+      const uFiltro = document.getElementById('filtro-unidade').value;
+      const sFiltro = document.getElementById('filtro-status').value;
+      const tbody = document.getElementById('tabela-dados');
       tbody.innerHTML = '';
-      baseAtividades.slice(0, 5).forEach(item => {
-        const badge = item.status === 'Concluído' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800';
+
+      const filtrados = dadosEquipamentos.filter(item => {
+        const uMatch = uFiltro === 'todos' || item.unidade === uFiltro;
+        const sMatch = sFiltro === 'todos' || item.status === sFiltro;
+        return uMatch && sMatch;
+      });
+
+      filtrados.forEach(item => {
+        const badgeClass = item.status === 'Concluído' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800';
         tbody.innerHTML += `
-          <tr>
-            <td class="p-3 font-mono text-xs">${item.data}</td>
-            <td class="p-3 font-semibold">${item.unidade}</td>
-            <td class="p-3">${item.linha}</td>
-            <td class="p-3">${item.equipamento}</td>
-            <td class="p-3"><span class="px-2 py-1 text-xs font-semibold rounded-full ${badge}">${item.status}</span></td>
+          <tr class="hover:bg-slate-50 transition">
+            <td class="p-4 font-mono text-xs">${item.data}</td>
+            <td class="p-4 font-medium text-slate-800">${item.unidade}</td>
+            <td class="p-4">${item.linha}</td>
+            <td class="p-4">${item.equipamento}</td>
+            <td class="p-4 font-mono text-xs">${item.serie}</td>
+            <td class="p-4">${item.tecnico}</td>
+            <td class="p-4"><span class="px-2 py-1 text-xs font-semibold rounded-full ${badgeClass}">${item.status}</span></td>
+            <td class="p-4 text-slate-500">${item.obs}</td>
           </tr>
         `;
       });
+
+      atualizarKPIs();
+    }
+
+    function atualizarKPIs() {
+      document.getElementById('kpi-total').innerText = dadosEquipamentos.length;
+      document.getElementById('kpi-concluido').innerText = dadosEquipamentos.filter(i => i.status === 'Concluído').length;
+      document.getElementById('kpi-pendente').innerText = dadosEquipamentos.filter(i => i.status === 'Pendente').length;
+      document.getElementById('kpi-jaboatao').innerText = dadosEquipamentos.filter(i => i.unidade === 'JGU').length;
     }
 
     function filtrarRelatorio() {
@@ -313,7 +362,7 @@
       const fim = document.getElementById('rel-fim').value;
       const status = document.getElementById('rel-status').value;
 
-      registrosFiltrados = baseAtividades.filter(item => {
+      registrosFiltrados = dadosEquipamentos.filter(item => {
         const matchUnidade = unidade === 'todas' || item.unidade === unidade;
         const matchStatus = status === 'todos' || item.status === status;
         let matchData = true;
@@ -333,7 +382,7 @@
       document.getElementById('qtd-registros').innerText = `${registrosFiltrados.length} registros encontrados`;
 
       registrosFiltrados.forEach(item => {
-        const badge = item.status === 'Concluído' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800';
+        const badgeClass = item.status === 'Concluído' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800';
         tbody.innerHTML += `
           <tr class="hover:bg-slate-50 transition">
             <td class="p-3 font-mono text-xs">${item.data}</td>
@@ -342,7 +391,7 @@
             <td class="p-3">${item.equipamento}</td>
             <td class="p-3 font-mono text-xs">${item.serie}</td>
             <td class="p-3">${item.tecnico}</td>
-            <td class="p-3"><span class="px-2 py-1 text-xs font-semibold rounded-full ${badge}">${item.status}</span></td>
+            <td class="p-3"><span class="px-2 py-1 text-xs font-semibold rounded-full ${badgeClass}">${item.status}</span></td>
             <td class="p-3 text-slate-500">${item.obs}</td>
           </tr>
         `;
@@ -361,14 +410,14 @@
     function exportarExcel() {
       const ws = XLSX.utils.json_to_sheet(registrosFiltrados);
       const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, "Relatorio");
+      XLSX.utils.book_append_sheet(wb, ws, "Equipamentos");
       XLSX.writeFile(wb, "Relatorio_MDiasBranco.xlsx");
     }
 
     function exportarPDF() {
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
-      doc.text("Relatório de Atividades - M. Dias Branco", 14, 15);
+      doc.text("Relatório de Instalações - M. Dias Branco", 14, 15);
       
       const tableData = registrosFiltrados.map(i => [i.data, i.unidade, i.linha, i.equipamento, i.serie, i.tecnico, i.status]);
       doc.autoTable({
@@ -380,9 +429,10 @@
     }
 
     window.onload = function() {
-      carregarDashboard();
+      renderizarTabelaDash();
       filtrarRelatorio();
     };
   </script>
 </body>
 </html>
+
